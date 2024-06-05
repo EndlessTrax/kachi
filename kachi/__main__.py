@@ -1,22 +1,34 @@
 import click
 
-from config import Config
+from kachi.config import Config
+from kachi.backup import backup_profile
+
+
+@click.group()
+def cli():
+    pass
 
 @click.command()
-@click.option('--config', default=None, help='Path to the config file.')
-def main(config):
-    """TODO: Add docstring here."""
+@click.option("-c", "--config", default=None, help="Path to a configuration file")
+@click.option("-p", "--profile", default=None, help="Name of the profile to backup")
+def backup(config, profile):
     
-    config = Config(config)
-    config.parse()
+    conf = Config(config)
 
-    for profile in config.settings:
-        print(profile.name)
-        print(profile.sources)
-        print(profile.backup_dest)
-        print()
+    if profile:
+        p = conf.get_profile(profile)
+        backup_profile(p, p.backup_dest)
+
+    else:
+        for p in conf.settings:
+            backup_profile(p, p.backup_dest)
+
+    print("Backup complete.")
 
 
 
-if __name__ == '__main__':
-    main()
+cli.add_command(backup)
+
+
+if __name__ == "__main__":
+    cli()

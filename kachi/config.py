@@ -49,7 +49,6 @@ class Settings:
                         backup_dest = v["backup_destination"] if "backup_destination" in v else default_backup_dest
                     )
                 )
-            
 
         return settings
 
@@ -74,4 +73,4 @@ class Config:
         for profile in self.settings:
             if profile.name == name:
                 return profile
-        return None
+        return None # TODO: Raise an exception here
