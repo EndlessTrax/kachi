@@ -1,0 +1,14 @@
+﻿profiles:
+  default:
+    sources:
+      - ".gitconfig"
+    
+  windows:
+    sources:
+      - "Profile.ps1"
+    backup_destination: "C:\\Users\\user\\backup"
+    
+  linux:
+    sources:
+      - ".bashrc"
+    backup_destination: "/home/user/backup"
