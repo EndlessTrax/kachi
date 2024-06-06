@@ -1,7 +1,7 @@
 import click
 
-from kachi.backup import backup_profile
-from kachi.config import Config
+from backup import backup_profile
+from config import Config
 
 
 @click.group()
@@ -14,7 +14,8 @@ def cli():
 @click.option("-p", "--profile", default=None, help="Name of the profile to backup")
 def backup(config, profile):
     
-    conf = Config(config).parse()
+    conf = Config(config)
+    conf.parse()
 
     if profile:
         p = conf.get_profile(profile)
