@@ -1,9 +1,10 @@
-from dataclasses import dataclass
 import pathlib
+from dataclasses import dataclass
+
 import yaml
 
-
 DEFAULT_CONFIG_PATH = pathlib.Path.home() / ".config" / "kachi" / "config.yaml"
+
 
 @dataclass
 class Profile:
@@ -15,12 +16,12 @@ class Profile:
 class Settings:
     def __init__(self, filepath):
         self.settings = self._parse_settings(filepath)
-        
+
     def _parse_settings(self, filepath):
-        with open(filepath, "r", encoding='utf8') as f:
+        with open(filepath, "r", encoding="utf8") as f:
             self.raw_content = f.read()
 
-        parsed_contents = yaml.safe_load(self.raw_content) 
+        parsed_contents = yaml.safe_load(self.raw_content)
 
         settings = []
         default_sources = []
@@ -28,25 +29,33 @@ class Settings:
 
         if "default" in parsed_contents["profiles"]:
             if "sources" in parsed_contents["profiles"]["default"]:
-                default_sources.extend(parsed_contents["profiles"]["default"]["sources"])
+                default_sources.extend(
+                    parsed_contents["profiles"]["default"]["sources"]
+                )
             if "backup_destination" in parsed_contents["profiles"]["default"]:
-                default_backup_dest += parsed_contents["profiles"]["default"]["backup_destination"]
+                default_backup_dest += parsed_contents["profiles"]["default"][
+                    "backup_destination"
+                ]
 
             settings.append(
                 Profile(
-                    name = "default",
-                    sources = default_sources,
-                    backup_dest = default_backup_dest
+                    name="default",
+                    sources=default_sources,
+                    backup_dest=default_backup_dest,
                 )
             )
-               
+
         for k, v in parsed_contents["profiles"].items():
             if k != "default":
                 settings.append(
                     Profile(
-                        name = k,
-                        sources = [*v["sources"], *default_sources] if "sources" in v else default_sources,
-                        backup_dest = v["backup_destination"] if "backup_destination" in v else default_backup_dest
+                        name=k,
+                        sources=[*v["sources"], *default_sources]
+                        if "sources" in v
+                        else default_sources,
+                        backup_dest=v["backup_destination"]
+                        if "backup_destination" in v
+                        else default_backup_dest,
                     )
                 )
 
@@ -60,12 +69,12 @@ class Config:
     def _set_filepath(self, filepath: str):
         if filepath is None:
             return DEFAULT_CONFIG_PATH
-        
+
         if not pathlib.Path(filepath).exists():
             raise FileNotFoundError(f"Config file not found at {filepath}")
-        
+
         return filepath
-    
+
     def parse(self):
         self.settings = Settings(self.filepath).settings
 
@@ -73,4 +82,4 @@ class Config:
         for profile in self.settings:
             if profile.name == name:
                 return profile
-        return None # TODO: Raise an exception here
+        return None  # TODO: Raise an exception here

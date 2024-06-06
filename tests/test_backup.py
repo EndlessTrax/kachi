@@ -1,4 +1,4 @@
-from kachi.backup import backup_file, backup_dir, backup_profile
+from kachi.backup import backup_dir, backup_file, backup_profile
 from kachi.config import Profile
 
 
@@ -36,20 +36,17 @@ class TestBackupFunctions:
         backupdir = tmp_path / "backup-dir"
         tmpdir.mkdir()
         backupdir.mkdir()
-        
+
         content = "Testing profile backup"
         tmp1.write_text(content)
         tmp2 = tmpdir / "test-file-2.txt"
         tmp2.write_text(content)
-        
+
         profile = Profile(
-            name = "test_profile",
-            sources = [tmp1, tmpdir],
-            backup_dest = backup_dir
+            name="test_profile", sources=[tmp1, tmpdir], backup_dest=backup_dir
         )
 
         backup_profile(profile, backupdir)
 
         assert (backupdir / tmp1.name).exists()
         assert (backupdir / tmp2.name).exists()
-
