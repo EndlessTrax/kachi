@@ -1,7 +1,3 @@
-import tempfile
-import pathlib
-import os
-
 from kachi.backup import backup_file, backup_dir, backup_profile
 from kachi.config import Profile
 
