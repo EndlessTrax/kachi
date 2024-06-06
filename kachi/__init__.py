@@ -1,1 +1,1 @@
-"""TODO: Add a description here"""
+"""Kachi is a simple tool for backing up valuable files."""

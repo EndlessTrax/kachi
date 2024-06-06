@@ -5,34 +5,29 @@ build-backend = "nuitka.distutils.Build"
 [project]
 name = "kachi"
 version = "1.0.0"
-dependencies = [
-    "click",
-    "pyyaml",
-]
-requires-python = ">=3.8"
-authors = [
-  {name = "Ricky White", email = "ricky@rickywhite.net"},
-]
-maintainers = [
-  {name = "Ricky White", email = "ricky@rickywhite.net"},
-]
-description = "TODO: Add a project description."
+dependencies = ["click", "pyyaml"]
+requires-python = ">=3.9"
+authors = [{ name = "Ricky White", email = "ricky@rickywhite.net" }]
+maintainers = [{ name = "Ricky White", email = "ricky@rickywhite.net" }]
+description = "Kachi is a simple tool for backing up valuable files."
 readme = "README.md"
-license = {file = "LICENSE.txt"}
-keywords = ["TODO:"]
+license = { file = "LICENSE.txt" }
+keywords = ["dotfile, backup, cli, configuration"]
 classifiers = [
-  "Programming Language :: Python"
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff","nuitka"]
+dev = ["pytest", "ruff", "nuitka"]
 
 [project.urls]
-Homepage = "https://example.com"
-Documentation = "https://readthedocs.org"
-Repository = "https://github.com/me/spam.git"
-"Bug Tracker" = "https://github.com/me/spam/issues"
-Changelog = "https://github.com/me/spam/blob/master/CHANGELOG.md"
+Documentation = "https://github.com/EndlessTrax/kachi/README.md"
+Repository = "https://github.com/EndlessTrax/kachi"
+"Bug Tracker" = "https://github.com/EndlessTrax/kachi/issues"
 
 [project.scripts]
 kachi = "kachi.__main__:main"
@@ -40,9 +35,7 @@ kachi = "kachi.__main__:main"
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--cov-config=.coveragerc --cov --cov-report term-missing"
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]
 
 [tool.ruff.lint]
 select = ["I", "E"]
