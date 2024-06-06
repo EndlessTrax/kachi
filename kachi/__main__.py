@@ -13,7 +13,8 @@ def cli():
 @click.option("-c", "--config", default=None, help="Path to a configuration file")
 @click.option("-p", "--profile", default=None, help="Name of the profile to backup")
 def backup(config, profile):
-    conf = Config(config)
+    
+    conf = Config(config).parse()
 
     if profile:
         p = conf.get_profile(profile)

@@ -33,7 +33,7 @@ class Settings:
                     parsed_contents["profiles"]["default"]["sources"]
                 )
             if "backup_destination" in parsed_contents["profiles"]["default"]:
-                default_backup_dest += parsed_contents["profiles"]["default"][
+                default_backup_dest = parsed_contents["profiles"]["default"][
                     "backup_destination"
                 ]
 
