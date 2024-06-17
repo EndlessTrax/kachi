@@ -2,6 +2,7 @@ import pathlib
 from dataclasses import dataclass
 
 import yaml
+from kachi import logger
 
 DEFAULT_CONFIG_PATH = pathlib.Path.home() / ".config" / "kachi" / "config.yaml"
 
@@ -67,12 +68,14 @@ class Config:
         self.filepath = self._set_filepath(filepath)
 
     def _set_filepath(self, filepath: str):
-        if filepath == '' or filepath is None:
+        if filepath == "" or filepath is None:
+            logger.info(f"Using default config path: {DEFAULT_CONFIG_PATH}")
             return DEFAULT_CONFIG_PATH
 
         if not pathlib.Path(filepath).exists():
-            raise FileNotFoundError(f"Config file not found at {filepath}")
+            raise FileNotFoundError(logger.error(f"Config file not found: {filepath}"))
 
+        logger.info(f"Using config path: {filepath}")
         return filepath
 
     def parse(self):

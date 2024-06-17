@@ -1,32 +1,42 @@
 import pathlib
 import shutil
 
-
-def backup_file(src: str, dest: str):
-    """Copy a file from src to dest."""
-    try:
-        f = pathlib.Path(src)
-        shutil.copyfile(src, f"{dest}/{f}").name
-        print(f"Successfully backedup {src} to {dest}")
-    except shutil.Error as e:
-        print(f"Unable to backup {src} due to: {e}")
+from kachi.config import Profile
+from kachi import logger
 
 
-def backup_dir(src: str, dest: str):
+def backup_dir(src: pathlib.Path, dest: pathlib.Path) -> None:
     """Copy a directory from src to dest."""
     try:
         shutil.copytree(src, dest, dirs_exist_ok=True)
-        print(f"Successfully backedup {src} to {dest}")
+        logger.info(
+            f"Backed up directory, all subdirectories, and files for {str(src)} to {str(dest)}"
+        )
     except shutil.Error as e:
-        print(f"Unable to backup {src} due to: {e}")
+        logger.error(f"Unable to backup {str(src)}")
+        logger.exception(e)
 
 
-def backup_profile(profile, backup_dest):
+def backup_file(src: pathlib.Path, dest: pathlib.Path) -> None:
+    """Copy a file from src to dest."""
+    try:
+        f = pathlib.Path(src).name
+        shutil.copyfile(src, (dest / f))
+        logger.info(f"Backed up {str(src)} to {str(dest)}")
+    except shutil.Error as e:
+        logger.error(f"Unable to backup {str(src)}")
+        logger.exception(e)
+
+
+def backup_profile(profile: Profile, backup_dest: pathlib.Path) -> None:
     """Backup a profile."""
-    for src in profile.sources:
+    for source in profile.sources:
+        src = pathlib.Path(source)
         if pathlib.Path(src).is_file():
             backup_file(src, backup_dest)
         elif pathlib.Path(src).is_dir():
             backup_dir(src, backup_dest)
         else:
-            print(f"Unable to backup {src}. File or directory not found.")
+            logger.error(
+                f"Unable to backup {str(src)} as it is not a file or directory."
+            )
