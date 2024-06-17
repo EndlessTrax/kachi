@@ -1,5 +1,6 @@
 import typer
 from typing_extensions import Annotated
+import importlib.metadata
 
 from kachi.backup import backup_profile
 from kachi.config import Config
@@ -12,7 +13,8 @@ app.add_typer(backup_app, name="backup")
 
 def get_version(value: bool):
     if value:
-        typer.echo("Kachi v0.1.0")
+        version = importlib.metadata.version("kachi")
+        print(f"kachi v{version}")
         raise typer.Exit()
 
 
