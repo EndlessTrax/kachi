@@ -1,5 +1,5 @@
-from kachi.backup import backup_dir, backup_file, backup_profile
-from kachi.config import Profile
+from src.kachi.backup import backup_dir, backup_file, backup_profile
+from src.kachi.config import Profile
 
 
 class TestBackupFunctions:

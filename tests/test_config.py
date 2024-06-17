@@ -1,6 +1,6 @@
 import pytest
 
-from kachi.config import DEFAULT_CONFIG_PATH, Config, Profile, Settings
+from src.kachi.config import DEFAULT_CONFIG_PATH, Config, Profile, Settings
 
 
 @pytest.fixture
