@@ -5,8 +5,8 @@ import shutil
 def backup_file(src: str, dest: str):
     """Copy a file from src to dest."""
     try:
-        f = pathlib.Path(src).name
-        shutil.copyfile(src, f"{dest}/{f}")
+        f = pathlib.Path(src)
+        shutil.copyfile(src, f"{dest}/{f}").name
         print(f"Successfully backedup {src} to {dest}")
     except shutil.Error as e:
         print(f"Unable to backup {src} due to: {e}")

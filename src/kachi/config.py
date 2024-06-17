@@ -10,7 +10,7 @@ DEFAULT_CONFIG_PATH = pathlib.Path.home() / ".config" / "kachi" / "config.yaml"
 class Profile:
     name: str
     sources: list[str]
-    backup_dest: str
+    backup_destination: str
 
 
 class Settings:
@@ -41,7 +41,7 @@ class Settings:
                 Profile(
                     name="default",
                     sources=default_sources,
-                    backup_dest=default_backup_dest,
+                    backup_destination=default_backup_dest,
                 )
             )
 
@@ -53,7 +53,7 @@ class Settings:
                         sources=[*v["sources"], *default_sources]
                         if "sources" in v
                         else default_sources,
-                        backup_dest=v["backup_destination"]
+                        backup_destination=v["backup_destination"]
                         if "backup_destination" in v
                         else default_backup_dest,
                     )
@@ -67,7 +67,7 @@ class Config:
         self.filepath = self._set_filepath(filepath)
 
     def _set_filepath(self, filepath: str):
-        if filepath is None:
+        if filepath == '' or filepath is None:
             return DEFAULT_CONFIG_PATH
 
         if not pathlib.Path(filepath).exists():

@@ -7,8 +7,8 @@ from kachi.config import Config
 
 
 app = typer.Typer(no_args_is_help=True)
-backup_app = typer.Typer()
-app.add_typer(backup_app, name="backup")
+# backup_app = typer.Typer()
+# app.add_typer(backup_app, name="backup")
 
 
 def get_version(value: bool):
@@ -29,7 +29,7 @@ def cli(
     pass
 
 
-@backup_app.command()
+@app.command()
 def backup(
     config: Annotated[str, typer.Option(help="Path to a configuration file")] = "",
     profile: Annotated[str, typer.Option(help="Name of the profile to backup")] = "",
@@ -39,11 +39,11 @@ def backup(
 
     if profile:
         p = conf.get_profile(profile)
-        backup_profile(p, p.backup_dest)
+        backup_profile(p, p.backup_destination)
 
     else:
         for p in conf.settings:
-            backup_profile(p, p.backup_dest)
+            backup_profile(p, p.backup_destination)
 
     print("Backup complete.")
 
