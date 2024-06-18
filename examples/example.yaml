@@ -2,11 +2,11 @@
   default:
     sources:
       - ".gitconfig"
+    backup_destination: "C:\\Users\\user\\backup"
     
   windows:
     sources:
       - "Profile.ps1"
-    backup_destination: "C:\\Users\\user\\backup"
     
   linux:
     sources:
