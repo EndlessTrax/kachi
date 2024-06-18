@@ -1,8 +1,8 @@
 import pathlib
 import shutil
 
-from kachi.config import Profile
 from kachi import logger
+from kachi.config import Profile
 
 
 def backup_dir(src: pathlib.Path, dest: pathlib.Path) -> None:
@@ -14,7 +14,7 @@ def backup_dir(src: pathlib.Path, dest: pathlib.Path) -> None:
 
         shutil.copytree(src, dest_dir_name, dirs_exist_ok=True)
         logger.info(
-            f"Backed up directory, all subdirectories, and files for {str(src)} to {str(dest)}"
+            f"Backed up directory, all subdirectories, and files for {str(src)} to {str(dest)}" # noqa: E501
         )
     except shutil.Error as e:
         logger.error(f"Unable to backup {str(src)}")

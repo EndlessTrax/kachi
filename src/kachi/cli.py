@@ -1,13 +1,13 @@
-from pathlib import Path
-import typer
-import logging
-from typing_extensions import Annotated
 import importlib.metadata
+import logging
+from pathlib import Path
 
+import typer
+from typing_extensions import Annotated
+
+from kachi import logger
 from kachi.backup import backup_profile
 from kachi.config import Config
-from kachi import logger
-
 
 app = typer.Typer(no_args_is_help=True)
 

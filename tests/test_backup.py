@@ -1,6 +1,8 @@
 import pathlib
 import shutil
+
 import pytest
+
 from src.kachi.backup import backup_dir, backup_file, backup_profile
 from src.kachi.config import Profile
 
@@ -55,11 +57,12 @@ class TestBackupFunctions:
 
     def test_invalid_source_in_profile(self, tmp_path):
         """Test that an invalid profile name raises an error"""
-        data = {   "name": "default",
-                        "sources": [tmp_path / "test-file.txt"],
-                        "backup_destination": tmp_path
-                    }
-        
+        data = {
+            "name": "default",
+            "sources": [tmp_path / "test-file.txt"],
+            "backup_destination": tmp_path,
+        }
+
         profile = Profile(**data)
         nf = backup_profile(profile, tmp_path)
         assert nf == [tmp_path / "test-file.txt"]

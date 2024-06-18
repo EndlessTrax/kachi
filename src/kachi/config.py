@@ -2,6 +2,7 @@ import pathlib
 from dataclasses import dataclass
 
 import yaml
+
 from kachi import logger
 
 DEFAULT_CONFIG_PATH = pathlib.Path.home() / ".config" / "kachi" / "config.yaml"
