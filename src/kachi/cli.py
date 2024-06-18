@@ -26,7 +26,7 @@ def cli(
         typer.Option("--version", callback=get_version, help="Show current version"),
     ] = False,
 ):
-    """TODO: Add a description here"""
+    """Kachi is a simple tool for backing up valuable files."""
     pass
 
 
@@ -35,7 +35,12 @@ def backup(
     config: Annotated[str, typer.Option(help="Path to a configuration file")] = "",
     profile: Annotated[str, typer.Option(help="Name of the profile to backup")] = "",
 ):
-    """Backup files and directories."""
+    """Backup files and directories.
+    
+    If no profile is specified, all profiles in the configuration file
+    will be backed up. If no configuration file is specified, the
+    default configuration file path will be used.
+    """
 
     logger.info("Starting backup...")
 
