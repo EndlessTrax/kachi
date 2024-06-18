@@ -6,11 +6,28 @@ By creating a short yaml file, you can declaritively decide what to back up, and
 
 Kachi support "profiles", which allow you to backup different files and directories to different locations, and potentially on different schedules (if you automate it further).
 
-#TODO: Add Image
+```txt
+➜ .\kachi.exe --help
+
+ Usage: kachi.exe [OPTIONS] COMMAND [ARGS]...
+
+ Kachi is a simple tool for backing up valuable files.
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────╮
+│ --version                Show current version                                   
+│ --install-completion     Install completion for the current shell.              
+│ --show-completion        Show completion for the current shell, to copy it or   
+│                          customize the installation.                            
+│ --help                   Show this message and exit.                            
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────╮
+│ backup   Backup files and directories.                                          
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 ## Installing
 
-Kachi is deployed as a single executable file that you can download from the releases page. Once downloaded, move it to a location that makes sense for your system and OS, and add to your PATH. 
+Kachi is deployed as a single executable file that you can [download from the releases page](https://github.com/EndlessTrax/kachi/releases). Once downloaded, move it to a location that makes sense for your system and OS, and add to your PATH. 
 
 > NOTE: If a compatable executable for your OS and architecture isn't available, please create an issue to request it, so that it can moved up in priority and added.
 
@@ -44,7 +61,22 @@ In the above example, if you backup `profile_1`, both the `.gitconfig` and `bash
 
 To backup the declared sources from your configuration, use the `backup` command with optional flags:
 
-#TODO: Add backup codeblock
+```txt
+➜ .\kachi.exe backup --help
+
+ Usage: kachi.exe backup [OPTIONS]
+
+ Backup files and directories.
+ If no profile is specified, all profiles in the configuration file will be backed up.
+ If no configuration file is specified, the default configuration file path will be
+ used.
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────╮
+│ --config         TEXT  Path to a configuration file                                  
+│ --profile        TEXT  Name of the profile to backup                                 
+│ --help                 Show this message and exit.                                   
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+```
 
 Without any flags, all profile will be backed up using a config file in the expected default location. Alternativly specify a single profile to backup with `--profile`:
 
