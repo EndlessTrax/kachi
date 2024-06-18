@@ -49,14 +49,16 @@ def backup(
             logger.error(f"Profile: {profile} not found.")
             raise typer.Exit(code=1)
 
-        backup_profile(p, Path(p.backup_destination))
+        nf = backup_profile(p, Path(p.backup_destination))
+        logger.warning(f"{len(nf)} sources not backed up.")
 
     else:
+        total_nf = []
         for p in conf.settings:
             logger.info(f"Backing up profile: {p.name}")
-            backup_profile(p, Path(p.backup_destination))
-
-    logger.info("Backup complete.")
+            nf = backup_profile(p, Path(p.backup_destination))
+            total_nf.extend(nf)
+        logger.warning(f"{len(total_nf)} sources not backed up.")
 
 
 if __name__ == "__main__":

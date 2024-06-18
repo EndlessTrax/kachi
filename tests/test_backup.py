@@ -1,3 +1,5 @@
+import shutil
+import pytest
 from src.kachi.backup import backup_dir, backup_file, backup_profile
 from src.kachi.config import Profile
 
@@ -17,17 +19,16 @@ class TestBackupFunctions:
 
     def test_backup_dir(self, tmp_path):
         """Test that the directory is successfully copied to the destination folder"""
-        d1 = tmp_path / "test-dir"
-        d2 = tmp_path / "test-dir-backup"
-        d1.mkdir()
-        d2.mkdir()
-
-        f = d1 / "test-file.txt"
-        content = "I am a test backup file for a directory"
+        d = tmp_path / "test-dir"
+        d.mkdir()
+        f = d / "test-file.txt"
+        content = "I am a test backup file"
         f.write_text(content)
 
-        backup_dir(d1, d2)
-        assert (d2 / f.name).exists()
+        backup_dir(d, tmp_path)
+        assert (tmp_path / d.name).exists()
+        assert (tmp_path / d.name / f.name).exists()
+        assert (tmp_path / d.name / f.name).read_text() == content
 
     def test_backup_profile(self, tmp_path):
         """Test that the profile is successfully backed up"""
@@ -43,10 +44,30 @@ class TestBackupFunctions:
         tmp2.write_text(content)
 
         profile = Profile(
-            name="test_profile", sources=[tmp1, tmpdir], backup_dest=backup_dir
+            name="test_profile", sources=[tmp1, tmpdir], backup_destination=backup_dir
         )
 
         backup_profile(profile, backupdir)
 
         assert (backupdir / tmp1.name).exists()
-        assert (backupdir / tmp2.name).exists()
+        assert (backupdir / "test-dir" / tmp2.name).exists()
+
+    def test_invalid_source_in_profile(self, tmp_path):
+        """Test that an invalid profile name raises an error"""
+        data = {   "name": "default",
+                        "sources": [tmp_path / "test-file.txt"],
+                        "backup_destination": tmp_path
+                    }
+        
+        profile = Profile(**data)
+        nf = backup_profile(profile, tmp_path)
+        assert nf == [tmp_path / "test-file.txt"]
+
+    def test_backup_file_exception(self, tmp_path):
+        """Test that an exception is raised when the file cannot be backed up"""
+        f = tmp_path / "test-file.txt"
+        f.touch()
+        f.chmod(0o000)
+
+        with pytest.raises(FileNotFoundError):
+            backup_file(f, tmp_path / "backup-dir")
