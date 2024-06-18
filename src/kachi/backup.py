@@ -27,7 +27,7 @@ def backup_file(src: pathlib.Path, dest: pathlib.Path) -> None:
         f = pathlib.Path(src).name
         shutil.copy2(src, (dest / f))
         logger.info(f"Backed up {str(src)} to {str(dest)}")
-    except FileNotFoundError as e:
+    except shutil.Error as e:
         logger.error(f"Unable to backup {str(src)}")
         logger.exception(e)
 

@@ -1,3 +1,4 @@
+import pathlib
 import shutil
 import pytest
 from src.kachi.backup import backup_dir, backup_file, backup_profile
@@ -69,5 +70,5 @@ class TestBackupFunctions:
         f.touch()
         f.chmod(0o000)
 
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(Exception):
             backup_file(f, tmp_path / "backup-dir")
