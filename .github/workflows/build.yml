@@ -27,7 +27,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          python -m pip install -r requirements.txt --no-deps
 
       - name: Build Executable
         uses: Nuitka/Nuitka-Action@main
