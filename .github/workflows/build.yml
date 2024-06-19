@@ -63,6 +63,11 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: Download Artifacts
+          path: dist/
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -72,10 +77,10 @@ jobs:
             --repo "${{ github.repository }}" \
             --generate-notes
 
-      - name: Upload release assets
+      - name: Upload artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
-            ./build/kachi-${{ github.ref_name }}-*          
+            ./dist/*         
