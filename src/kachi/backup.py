@@ -1,6 +1,8 @@
 import pathlib
 import shutil
 
+import typer
+
 from kachi import logger
 from kachi.config import Profile
 
@@ -35,8 +37,11 @@ def backup_file(src: pathlib.Path, dest: pathlib.Path) -> None:
 def backup_profile(profile: Profile, backup_dest: pathlib.Path) -> list:
     """Backup a profile."""
 
-    sources_not_found = []
+    if not backup_dest.exists() or not backup_dest.is_dir():
+        logger.error(f"Destination is not a directory: {str(backup_dest)}")
+        raise typer.Exit(code=1)
 
+    sources_not_found = []
     for source in profile.sources:
         src = pathlib.Path(source)
         if pathlib.Path(src).is_file():

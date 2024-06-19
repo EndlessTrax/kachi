@@ -2,6 +2,7 @@ import pathlib
 import shutil
 
 import pytest
+import typer
 
 from src.kachi.backup import backup_dir, backup_file, backup_profile
 from src.kachi.config import Profile
@@ -75,3 +76,12 @@ class TestBackupFunctions:
 
         with pytest.raises(Exception):
             backup_file(f, tmp_path / "backup-dir")
+
+    def test_backup_dir_not_exist_and_exits(self, tmp_path):
+        """Test that an exception is raised when the directory does not exist"""
+        d = tmp_path / "test-dir"
+
+        with pytest.raises(Exception):
+            backup_dir(d, tmp_path / "backup-dir")
+
+        assert typer.Exit(code=1)
