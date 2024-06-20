@@ -55,7 +55,9 @@ def backup(
             raise typer.Exit(code=1)
 
         nf = backup_profile(p, Path(p.backup_destination))
-        logger.warning(f"{len(nf)} sources not backed up.")
+
+        if len(nf) > 0:
+            logger.warning(f"{len(nf)} sources not backed up.")
 
     else:
         total_nf = []
@@ -63,7 +65,9 @@ def backup(
             logger.info(f"Backing up profile: {p.name}")
             nf = backup_profile(p, Path(p.backup_destination))
             total_nf.extend(nf)
-        logger.warning(f"{len(total_nf)} sources not backed up.")
+
+        if len(total_nf) > 0:
+            logger.warning(f"{len(total_nf)} sources not backed up.")
 
 
 if __name__ == "__main__":
