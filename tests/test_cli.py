@@ -1,3 +1,4 @@
+from kachi import __version__
 from kachi.cli import app
 from typer.testing import CliRunner
 
@@ -9,3 +10,4 @@ class TestCli:
         result = runner.invoke(app, ["--version"])
         assert result.exit_code == 0
         assert "kachi" in result.stdout
+        assert __version__ in result.stdout
