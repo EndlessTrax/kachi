@@ -1,10 +1,9 @@
-import importlib.metadata
-import logging
 from pathlib import Path
 
 import typer
 from typing_extensions import Annotated
 
+from kachi import __version__ as kachi_version
 from kachi import logger
 from kachi.backup import backup_profile
 from kachi.config import Config
@@ -14,8 +13,7 @@ app = typer.Typer(no_args_is_help=True)
 
 def get_version(value: bool):
     if value:
-        version = importlib.metadata.version("kachi")
-        print(f"kachi v{version}")
+        print(f"kachi v{kachi_version}")
         raise typer.Exit()
 
 
@@ -36,7 +34,7 @@ def backup(
     profile: Annotated[str, typer.Option(help="Name of the profile to backup")] = "",
 ):
     """Backup files and directories.
-    
+
     If no profile is specified, all profiles in the configuration file
     will be backed up. If no configuration file is specified, the
     default configuration file path will be used.
