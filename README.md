@@ -1,8 +1,8 @@
 # Kachi
 
-Kachi is a simple tool for backing up valuable files, such as dot files, config files, and any directory you wish to backup. 
+Kachi is a simple tool for backing up valuable files, such as dotfiles, config files, and any directory you wish to backup. 
 
-By creating a short yaml file, you can declaritively decide what to back up, and where. 
+By creating a short yaml file, you can declaratively decide what to back up, and where. 
 
 Kachi uses "profiles", which allow you to backup different files and directories to different locations, and potentially on different schedules (if you automate it further).
 
@@ -33,9 +33,9 @@ Kachi is deployed as a single executable file that you can [download from the re
 
 ## Configuration
 
-By default, Kachi looks for a configuration file at `.config/kachi/config.yaml` relative to the users home directory on all systems. You can specify a different configuration location using the `--config` flag (see usage example below.)
+By default, Kachi looks for a configuration file at `.config/kachi/config.yaml` relative to the user's home directory on all systems. You can specify a different configuration location using the `--config` flag (see usage example below.)
 
-As mentioned above, you can declare different profiles under the top level `profiles` key. Profiles can be named almost anything you want. The only exception is the `default` profile. While not required, the `default` profile is a handy way of reducing repetition in your configuration file. Any source added to the default profile will be added to all other profiles automatically when backed up.
+As mentioned above, you can declare different profiles under the top-level `profiles` key. Profiles can be named almost anything you want. The only exception is the `default` profile. While not required, the `default` profile is a handy way of reducing repetition in your configuration file. Any source added to the default profile will be added to all other profiles automatically when backed up.
 
 Example:
 
@@ -53,13 +53,13 @@ profiles:
 
 > NOTE: A fuller [example of the config.yaml](examples\example.yaml) file can be found in the example folder.
 
-In the above example, if you backup `profile_1`, both the `.gitconfig` and `.bashrc` files will be backed up to the default `backup_destination`. If a `backup_destination` was declared in `profile_1`, then that would take presidence.
+In the above example, if you backup `profile_1`, both the `.gitconfig` and `.bashrc` files will be backed up to the default `backup_destination`. If a `backup_destination` was declared in `profile_1`, then that would take precedence.
 
 > NOTE: Additional config formats will be added in future (such as `json` or `ini`), but please see issues and upvote any you wish to be added next to help prioritize formats.
 
 ## Usage
 
-To backup the declared sources from your configuration, use the `backup` command with optional flags:
+To back up the declared sources from your configuration, use the `backup` command with optional flags:
 
 ```txt
 ➜ .\kachi.exe backup --help
@@ -78,7 +78,7 @@ To backup the declared sources from your configuration, use the `backup` command
 ╰──────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-Without any flags, all profile will be backed up using a config file in the expected default location. Alternativly, specify a single profile to backup with `--profile`:
+Without any flags, all profiles will be backed up using a config file in the expected default location. Alternatively, specify a single profile to backup with `--profile`:
 
 ```shell
 kachi backup --profile profile_1 
@@ -96,6 +96,6 @@ If you find a bug, please file an [issue](https://github.com/EndlessTrax/kachi/i
 
 If you have feature requests, please [file an issue](https://github.com/EndlessTrax/kachi/issues) and use the appropriate label.
 
-Please **raise an issue before making a PR**, so that the issue and implementation can be discussed before you write any code. This will save you time, and increase the chances of your PR being merged without significant changes. And please **include tests** for any PR's that include code (unless current tests cover your code contribution).
+Please **raise an issue before making a PR**, so that the issue and implementation can be discussed before you write any code. This will save you time, and increase the chances of your PR being merged without significant changes. And please **include tests** for any PRs that include code (unless current tests cover your code contribution).
 
-Please **lint and format you code** with [ruff](https://github.com/astral-sh/ruff). This will help keep the codebase consistent and maintainable.
+Please **lint **and format **your** code** with [ruff](https://github.com/astral-sh/ruff). This will help keep the codebase consistent and maintainable.
