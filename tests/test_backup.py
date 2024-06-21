@@ -1,6 +1,3 @@
-import pathlib
-import shutil
-
 import pytest
 import typer
 
@@ -36,25 +33,34 @@ class TestBackupFunctions:
 
     def test_backup_profile(self, tmp_path):
         """Test that the profile is successfully backed up"""
-        tmp1 = tmp_path / "test-file-1.txt"
         tmpdir = tmp_path / "test-dir"
         backupdir = tmp_path / "backup-dir"
         tmpdir.mkdir()
         backupdir.mkdir()
 
         content = "Testing profile backup"
+        tmp1 = tmp_path / "test-file-1.txt"
         tmp1.write_text(content)
         tmp2 = tmpdir / "test-file-2.txt"
         tmp2.write_text(content)
 
-        profile = Profile(
+        _ = backup_profile(Profile(
             name="test_profile", sources=[tmp1, tmpdir], backup_destination=backup_dir
-        )
-
-        backup_profile(profile, backupdir)
+        ))
 
         assert (backupdir / tmp1.name).exists()
         assert (backupdir / "test-dir" / tmp2.name).exists()
+
+    def test_backup_profile_has_invaild_backup_destination(self, tmp_path):
+        """Test that an invalid backup destination raises an error"""
+        profile = Profile(
+            name="test_profile",
+            sources=[tmp_path / "test-file.txt"],
+            backup_destination=tmp_path / "invalid-dir",
+        )
+
+        with pytest.raises(Exception):
+            backup_profile(profile, tmp_path)
 
     def test_invalid_source_in_profile(self, tmp_path):
         """Test that an invalid profile name raises an error"""
@@ -65,7 +71,7 @@ class TestBackupFunctions:
         }
 
         profile = Profile(**data)
-        nf = backup_profile(profile, tmp_path)
+        nf = backup_profile(profile)
         assert nf == [tmp_path / "test-file.txt"]
 
     def test_backup_file_exception(self, tmp_path):
