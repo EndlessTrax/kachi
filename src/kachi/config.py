@@ -19,7 +19,7 @@ class Settings:
     def __init__(self, filepath):
         self.settings = self._parse_settings(filepath)
 
-    def _parse_settings(self, filepath):
+    def _parse_settings(self, filepath) -> list[Profile]:
         with open(filepath, "r", encoding="utf8") as f:
             self.raw_content = f.read()
 
@@ -29,6 +29,9 @@ class Settings:
         default_sources = []
         default_backup_dest = None
 
+        # If default is present in the profiles, add it's sources to each profile.
+        # If the profile does not have a backup_destination, assign the default
+        # backup_destination to the profile.
         if "default" in parsed_contents["profiles"]:
             if "sources" in parsed_contents["profiles"]["default"]:
                 default_sources.extend(
@@ -68,7 +71,7 @@ class Config:
     def __init__(self, filepath=None):
         self.filepath = self._set_filepath(filepath)
 
-    def _set_filepath(self, filepath: str):
+    def _set_filepath(self, filepath: str) -> str:
         if filepath == "" or filepath is None:
             logger.info(f"Using default config path: {DEFAULT_CONFIG_PATH}")
             return DEFAULT_CONFIG_PATH
@@ -79,11 +82,12 @@ class Config:
         logger.info(f"Using config path: {filepath}")
         return filepath
 
-    def parse(self):
+    def parse(self) -> None:
         self.settings = Settings(self.filepath).settings
 
-    def get_profile(self, name: str):
+    def get_profile(self, name: str) -> Profile | ValueError:
         for profile in self.settings:
             if profile.name == name:
                 return profile
-        return None  # TODO: Raise an exception here
+        else:
+            raise ValueError(f"Profile with name '{name}' not found.")

@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 
 from kachi import __version__ as kachi_version
 from kachi import logger
-from kachi.backup import backup_profile
+from kachi.backup import backup_profile, log_not_found
 from kachi.config import Config
 
 app = typer.Typer(no_args_is_help=True)
@@ -46,26 +46,25 @@ def backup(
     conf.parse()
 
     if profile:
-        logger.info(f"Backing up profile: {profile}")
-        p = conf.get_profile(profile)
-        if p is None:
-            logger.error(f"Profile: {profile} not found.")
+        try:
+            p = conf.get_profile(profile)
+        except ValueError as e:
+            logger.error(e)
             raise typer.Exit(code=1)
 
-        nf = backup_profile(p, Path(p.backup_destination))
+        not_found = backup_profile(p)
 
-        if len(nf) > 0:
+        if len(not_found) > 0:
             logger.warning(f"{len(nf)} sources not backed up.")
 
     else:
-        total_nf = []
+        not_found = []
         for p in conf.settings:
-            logger.info(f"Backing up profile: {p.name}")
-            nf = backup_profile(p, Path(p.backup_destination))
-            total_nf.extend(nf)
+            nf = backup_profile(p)
+            not_found.extend(nf)
 
-        if len(total_nf) > 0:
-            logger.warning(f"{len(total_nf)} sources not backed up.")
+    log_not_found(not_found)
+    typer.Exit(code=0)
 
 
 if __name__ == "__main__":

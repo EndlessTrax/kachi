@@ -54,4 +54,9 @@ class TestConfig:
         assert profile.name == "linux"
         assert profile.sources == [".bashrc", ".gitconfig"]
         assert profile.backup_destination == "/home/user/backup"
-        assert config.get_profile("invalid") is None
+    
+    def test_config_get_profile_function_invalid_profile_name(self, test_config_path):
+        config = Config(test_config_path)
+        config.parse()
+        with pytest.raises(ValueError):
+            config.get_profile("invalid_profile")
