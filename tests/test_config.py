@@ -55,7 +55,9 @@ class TestConfig:
         assert profile.sources == [".bashrc", ".gitconfig"]
         assert profile.backup_destination == "/home/user/backup"
 
-    def test_config_get_profile_function_invalid_profile_name(self, test_config_path: str):
+    def test_config_get_profile_function_invalid_profile_name(
+        self, test_config_path: str
+    ):
         config = Config(test_config_path)
         config.parse()
         with pytest.raises(ValueError):
