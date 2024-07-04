@@ -1,3 +1,6 @@
+![GitHub Release](https://img.shields.io/github/v/release/endlesstrax/kachi)
+![GitHub branch check runs](https://img.shields.io/github/check-runs/endlesstrax/kachi/main)
+
 # Kachi
 
 Kachi is a simple tool for backing up valuable files, such as dotfiles, config files, and any directory you wish to backup. 
@@ -98,4 +101,4 @@ If you have feature requests, please [file an issue](https://github.com/EndlessT
 
 Please **raise an issue before making a PR**, so that the issue and implementation can be discussed before you write any code. This will save you time, and increase the chances of your PR being merged without significant changes. And please **include tests** for any PRs that include code (unless current tests cover your code contribution).
 
-Please **lint **and format **your** code** with [ruff](https://github.com/astral-sh/ruff). This will help keep the codebase consistent and maintainable.
+Please **lint and format your code** with [ruff](https://github.com/astral-sh/ruff). This will help keep the codebase consistent and maintainable.
