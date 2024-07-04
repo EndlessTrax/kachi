@@ -25,7 +25,7 @@ def cli(
     ] = False,
 ):
     """Kachi is a simple tool for backing up valuable files."""
-    pass
+    pass  # pragma: no cover
 
 
 @app.command()
@@ -68,4 +68,4 @@ def backup(
 
 
 if __name__ == "__main__":
-    typer.run(cli)
+    typer.run(cli)  # pragma: no cover

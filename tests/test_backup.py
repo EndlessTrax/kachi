@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 import typer
 
-from src.kachi.backup import backup_dir, backup_file, backup_profile
+from src.kachi.backup import backup_dir, backup_file, backup_profile, log_not_found
 from src.kachi.config import Profile
 
 
@@ -66,7 +66,7 @@ class TestBackupFunctions:
         )
 
         with pytest.raises(Exception):
-            backup_profile(profile, tmp_path)
+            backup_profile(profile)
 
     def test_invalid_source_in_profile(self, tmp_path: Path):
         """Test that an invalid profile name raises an error"""
@@ -97,3 +97,12 @@ class TestBackupFunctions:
             backup_dir(d, tmp_path / "backup-dir")
 
         assert typer.Exit(code=1)
+
+    def test_log_not_found_func(self, caplog):
+        """Test that the sources not found are logged"""
+        not_found = [Path("test-file-1.txt"), Path("test-file-2.txt")]
+        log_not_found(not_found)
+
+        assert "2 sources not backed up." in caplog.text
+        assert "Source not found: test-file-1.txt" in caplog.text
+        assert "Source not found: test-file-2.txt" in caplog.text
