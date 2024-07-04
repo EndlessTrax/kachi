@@ -11,7 +11,7 @@ from kachi.config import Config
 app = typer.Typer(no_args_is_help=True)
 
 
-def get_version(value: bool):
+def get_version(value: bool) -> None:
     if value:
         print(f"kachi v{kachi_version}")
         raise typer.Exit()

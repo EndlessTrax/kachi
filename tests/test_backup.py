@@ -98,7 +98,7 @@ class TestBackupFunctions:
 
         assert typer.Exit(code=1)
 
-    def test_log_not_found_func(self, caplog):
+    def test_log_not_found_func(self, caplog: pytest.LogCaptureFixture):
         """Test that the sources not found are logged"""
         not_found = [Path("test-file-1.txt"), Path("test-file-2.txt")]
         log_not_found(not_found)
