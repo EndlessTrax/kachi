@@ -1,5 +1,5 @@
-import pathlib
 import shutil
+from pathlib import Path
 
 import typer
 
@@ -7,11 +7,11 @@ from kachi import logger
 from kachi.config import Profile
 
 
-def backup_dir(src: pathlib.Path, dest: pathlib.Path) -> None:
+def backup_dir(src: Path, dest: Path) -> None:
     """Copy a directory from src to dest."""
     try:
         dest_dir_name = dest / src.name
-        if not pathlib.Path(dest_dir_name).exists():
+        if not Path(dest_dir_name).exists():
             dest_dir_name.mkdir(exist_ok=True)
 
         shutil.copytree(src, dest_dir_name, dirs_exist_ok=True)
@@ -23,10 +23,10 @@ def backup_dir(src: pathlib.Path, dest: pathlib.Path) -> None:
         logger.exception(e)
 
 
-def backup_file(src: pathlib.Path, dest: pathlib.Path) -> None:
+def backup_file(src: Path, dest: Path) -> None:
     """Copy a file from src to dest."""
     try:
-        f = pathlib.Path(src).name
+        f = Path(src).name
         shutil.copy2(src, (dest / f))
         logger.info(f"Backed up {str(src)} to {str(dest)}")
     except shutil.Error as e:
@@ -36,7 +36,7 @@ def backup_file(src: pathlib.Path, dest: pathlib.Path) -> None:
 
 def backup_profile(profile: Profile) -> list:
     """Backup a profile."""
-    dest = pathlib.Path(profile.backup_destination)
+    dest = Path(profile.backup_destination)
     if not dest.exists() or not dest.is_dir():
         logger.error(f"Destination is not a directory: {profile.backup_destination}")
         raise typer.Exit(code=1)
@@ -45,10 +45,10 @@ def backup_profile(profile: Profile) -> list:
 
     sources_not_found = []
     for source in profile.sources:
-        src = pathlib.Path(source)
-        if pathlib.Path(src).is_file():
+        src = Path(source)
+        if Path(src).is_file():
             backup_file(src, dest)
-        elif pathlib.Path(src).is_dir():
+        elif Path(src).is_dir():
             backup_dir(src, dest)
         else:
             sources_not_found.append(src)
