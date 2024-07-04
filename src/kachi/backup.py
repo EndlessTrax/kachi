@@ -36,9 +36,8 @@ def backup_file(src: pathlib.Path, dest: pathlib.Path) -> None:
 
 def backup_profile(profile: Profile) -> list:
     """Backup a profile."""
-    
-    backup_dir = pathlib.Path(profile.backup_destination)
-    if not backup_dir.exists() or not backup_dir.is_dir():
+    dest = pathlib.Path(profile.backup_destination)
+    if not dest.exists() or not dest.is_dir():
         logger.error(f"Destination is not a directory: {profile.backup_destination}")
         raise typer.Exit(code=1)
 
@@ -48,9 +47,9 @@ def backup_profile(profile: Profile) -> list:
     for source in profile.sources:
         src = pathlib.Path(source)
         if pathlib.Path(src).is_file():
-            backup_file(src, backup_dir)
+            backup_file(src, dest)
         elif pathlib.Path(src).is_dir():
-            backup_dir(src, backup_dir)
+            backup_dir(src, dest)
         else:
             sources_not_found.append(src)
             logger.error(f"{str(src)} not found")
