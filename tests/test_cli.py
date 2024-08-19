@@ -1,6 +1,7 @@
+from typer.testing import CliRunner
+
 from kachi import __version__
 from kachi.cli import app
-from typer.testing import CliRunner
 
 runner = CliRunner()
 
