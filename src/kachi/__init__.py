@@ -2,7 +2,7 @@
 
 import logging
 
-__version__ = "0.1.10"
+__version__ = "0.1.11"
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
