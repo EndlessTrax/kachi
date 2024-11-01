@@ -25,7 +25,7 @@ dependencies = [
 dev = [
   "pytest==8.3.3",
   "pytest-cov==6.0.0",
-  "ruff==0.6.8",
+  "ruff==0.7.2",
   "nuitka==2.4.11"
 ]
 
