@@ -21,14 +21,6 @@ dependencies = [
   "pyyaml==6.0.2"
 ]
 
-[project.optional-dependencies]
-dev = [
-  "pytest==8.3.3",
-  "pytest-cov==6.0.0",
-  "ruff==0.7.2",
-  "nuitka==2.4.11"
-]
-
 [project.urls]
 Documentation = "https://github.com/EndlessTrax/kachi/README.md"
 Repository = "https://github.com/EndlessTrax/kachi"
@@ -53,3 +45,11 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 docstring-code-format = true
 docstring-code-line-length = 72
+
+[tool.uv]
+dev-dependencies = [
+    "nuitka>=2.4.11",
+    "pytest>=8.3.3",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.7.2",
+]
