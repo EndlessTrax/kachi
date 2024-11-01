@@ -20,25 +20,18 @@ jobs:
       - name: Check-out repository
         uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          architecture: "x64"
+          cache: "pip"
 
-      - name: Set up Python
-        run: uv python install 3.12
-
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
-          uv sync --all-extras --dev
-      
-      - name: Activate virtual environment
-        if: matrix.os == 'ubuntu-latest'
-        run:
-            source .venv/bin/activate
-
-      - name: Activate virtual environment
-        if: matrix.os == 'windows-latest'
-        run:
-            .venv\Scripts\activate
+          python -m pip install --upgrade pip
+          python -m pip install .
+          python -m pip install nuitka
 
       - name: Build Executable (Windows)
         uses: Nuitka/Nuitka-Action@main
