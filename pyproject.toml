@@ -46,8 +46,8 @@ line-ending = "auto"
 docstring-code-format = true
 docstring-code-line-length = 72
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "nuitka>=2.4.11",
     "pytest>=8.3.3",
     "pytest-cov>=6.0.0",
