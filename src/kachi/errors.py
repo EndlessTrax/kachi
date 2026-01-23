@@ -1,6 +1,5 @@
 """Error handling module for Kachi backup operations."""
 
-import logging
 from pathlib import Path
 from typing import Protocol
 
