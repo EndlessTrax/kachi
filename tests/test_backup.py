@@ -80,22 +80,6 @@ class TestBackupFunctions:
         nf = backup_profile(profile)
         assert nf == [tmp_path / "test-file.txt"]
 
-    def test_backup_file_exception(
-        self, tmp_path: Path, caplog: pytest.LogCaptureFixture
-    ):
-        """Test that permission errors are caught and logged when file cannot be backed up"""
-        backup_dest = tmp_path / "backup-dir"
-        backup_dest.mkdir()
-        f = tmp_path / "test-file.txt"
-        f.touch()
-        f.chmod(0o000)
-
-        # Permission error should be caught and logged, not raised
-        backup_file(f, backup_dest)
-
-        # Verify error message was logged
-        assert "Permission denied" in caplog.text
-
     def test_backup_file_permission_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ):
@@ -117,7 +101,7 @@ class TestBackupFunctions:
     def test_backup_dir_permission_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ):
-        """Test that permission errors are logged correctly when backing up a directory"""
+        """Test permission errors are logged correctly when backing up a directory"""
         dest = tmp_path / "backup-dir"
         dest.mkdir()
         test_dir = tmp_path / "test-dir"

@@ -7,10 +7,12 @@ from kachi import logger
 from kachi.config import Profile
 from kachi.errors import BackupErrorHandler
 
+# Create a module-level error handler to avoid unnecessary object creation
+error_handler = BackupErrorHandler(logger)
+
 
 def backup_dir(src: Path, dest: Path) -> None:
     """Copy a directory from src to dest."""
-    error_handler = BackupErrorHandler(logger)
     try:
         dest_dir_name = dest / src.name
         if not Path(dest_dir_name).exists():
@@ -28,7 +30,6 @@ def backup_dir(src: Path, dest: Path) -> None:
 
 def backup_file(src: Path, dest: Path) -> None:
     """Copy a file from src to dest."""
-    error_handler = BackupErrorHandler(logger)
     try:
         f = Path(src).name
         shutil.copy2(src, (dest / f))
@@ -41,7 +42,6 @@ def backup_file(src: Path, dest: Path) -> None:
 
 def backup_profile(profile: Profile) -> list:
     """Backup a profile."""
-    error_handler = BackupErrorHandler(logger)
     dest = Path(profile.backup_destination)
     if not dest.exists() or not dest.is_dir():
         error_handler.handle_invalid_destination(dest)
