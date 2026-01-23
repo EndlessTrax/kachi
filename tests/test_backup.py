@@ -80,14 +80,60 @@ class TestBackupFunctions:
         nf = backup_profile(profile)
         assert nf == [tmp_path / "test-file.txt"]
 
-    def test_backup_file_exception(self, tmp_path: Path):
-        """Test that an exception is raised when the file cannot be backed up"""
+    def test_backup_file_exception(
+        self, tmp_path: Path, caplog: pytest.LogCaptureFixture
+    ):
+        """Test that permission errors are caught and logged when file cannot be backed up"""
+        backup_dest = tmp_path / "backup-dir"
+        backup_dest.mkdir()
         f = tmp_path / "test-file.txt"
         f.touch()
         f.chmod(0o000)
 
-        with pytest.raises(Exception):
-            backup_file(f, tmp_path / "backup-dir")
+        # Permission error should be caught and logged, not raised
+        backup_file(f, backup_dest)
+
+        # Verify error message was logged
+        assert "Permission denied" in caplog.text
+
+    def test_backup_file_permission_error(
+        self, tmp_path: Path, caplog: pytest.LogCaptureFixture
+    ):
+        """Test that permission errors are logged correctly when backing up a file"""
+        backup_dir = tmp_path / "backup-dir"
+        backup_dir.mkdir()
+        f = tmp_path / "test-file.txt"
+        f.write_text("test content")
+        f.chmod(0o000)
+
+        # Permission error should be caught and logged, not raised
+        backup_file(f, backup_dir)
+
+        # Verify error message was logged
+        assert "Permission denied" in caplog.text
+        assert str(f) in caplog.text
+        assert "Skipping" in caplog.text
+
+    def test_backup_dir_permission_error(
+        self, tmp_path: Path, caplog: pytest.LogCaptureFixture
+    ):
+        """Test that permission errors are logged correctly when backing up a directory"""
+        dest = tmp_path / "backup-dir"
+        dest.mkdir()
+        test_dir = tmp_path / "test-dir"
+        test_dir.mkdir()
+        test_file = test_dir / "test-file.txt"
+        test_file.write_text("test content")
+
+        # Make directory unreadable
+        test_dir.chmod(0o000)
+
+        # Permission error should be caught and logged, not raised
+        backup_dir(test_dir, dest)
+
+        # Verify error message was logged
+        assert "Permission denied" in caplog.text
+        assert str(test_dir) in caplog.text
 
     def test_backup_dir_not_exist_and_exits(self, tmp_path: Path):
         """Test that an exception is raised when the directory does not exist"""
