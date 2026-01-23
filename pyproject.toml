@@ -11,7 +11,7 @@ maintainers = [{ name = "Ricky White", email = "ricky@rickywhite.net" }]
 description = "Kachi is a simple tool for backing up valuable files."
 readme = "README.md"
 license = { file = "LICENSE.txt" }
-keywords = ["dotfile, backup, cli, configuration"]
+keywords = ["dotfile", "backup", "cli", "configuration"]
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python :: 3.12",
@@ -46,8 +46,8 @@ line-ending = "auto"
 docstring-code-format = true
 docstring-code-line-length = 72
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "nuitka>=2.4.11",
     "pytest>=8.3.3",
     "pytest-cov>=6.0.0",
