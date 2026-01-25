@@ -5,6 +5,10 @@ import typer
 
 from kachi import logger
 from kachi.config import Profile
+from kachi.errors import BackupErrorHandler
+
+# Create a module-level error handler to avoid unnecessary object creation
+error_handler = BackupErrorHandler(logger)
 
 
 def backup_dir(src: Path, dest: Path) -> None:
@@ -18,9 +22,19 @@ def backup_dir(src: Path, dest: Path) -> None:
         logger.info(
             f"Backed up directory, all subdirectories, and files for {str(src)} to {str(dest)}"  # noqa: E501
         )
+    except PermissionError:
+        error_handler.handle_permission_error(src)
+    except FileNotFoundError:
+        # Let FileNotFoundError propagate for proper error handling
+        raise
     except shutil.Error as e:
-        logger.error(f"Unable to backup {str(src)}")
-        logger.exception(e)
+        error_handler.handle_shutil_error(e, src)
+    except OSError as e:
+        # Catch any remaining OS-level errors (e.g., permission errors not caught above)
+        if e.errno == 13:  # Permission denied
+            error_handler.handle_permission_error(src)
+        else:
+            error_handler.handle_shutil_error(e, src)
 
 
 def backup_file(src: Path, dest: Path) -> None:
@@ -29,16 +43,26 @@ def backup_file(src: Path, dest: Path) -> None:
         f = Path(src).name
         shutil.copy2(src, (dest / f))
         logger.info(f"Backed up {str(src)} to {str(dest)}")
+    except PermissionError:
+        error_handler.handle_permission_error(src)
+    except FileNotFoundError:
+        # Let FileNotFoundError propagate for proper error handling
+        raise
     except shutil.Error as e:
-        logger.error(f"Unable to backup {str(src)}")
-        logger.exception(e)
+        error_handler.handle_shutil_error(e, src)
+    except OSError as e:
+        # Catch any remaining OS-level errors (e.g., permission errors not caught above)
+        if e.errno == 13:  # Permission denied
+            error_handler.handle_permission_error(src)
+        else:
+            error_handler.handle_shutil_error(e, src)
 
 
 def backup_profile(profile: Profile) -> list:
     """Backup a profile."""
     dest = Path(profile.backup_destination)
     if not dest.exists() or not dest.is_dir():
-        logger.error(f"Destination is not a directory: {profile.backup_destination}")
+        error_handler.handle_invalid_destination(dest)
         raise typer.Exit(code=1)
 
     logger.info(f"Backing up profile: {profile}")
@@ -52,7 +76,7 @@ def backup_profile(profile: Profile) -> list:
             backup_dir(src, dest)
         else:
             sources_not_found.append(src)
-            logger.error(f"{str(src)} not found")
+            error_handler.handle_file_not_found(src)
 
     return sources_not_found
 
