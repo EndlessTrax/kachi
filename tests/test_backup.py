@@ -88,15 +88,23 @@ class TestBackupFunctions:
         backup_dir.mkdir()
         f = tmp_path / "test-file.txt"
         f.write_text("test content")
-        f.chmod(0o000)
 
-        # Permission error should be caught and logged, not raised
-        backup_file(f, backup_dir)
+        try:
+            f.chmod(0o000)
 
-        # Verify error message was logged
-        assert "Permission denied" in caplog.text
-        assert str(f) in caplog.text
-        assert "Skipping" in caplog.text
+            # Permission error should be caught and logged, not raised
+            backup_file(f, backup_dir)
+
+            # Verify error message was logged
+            assert "Permission denied" in caplog.text
+            assert str(f) in caplog.text
+            assert "Skipping" in caplog.text
+
+            # Verify the backup operation failed (file not copied)
+            assert not (backup_dir / f.name).exists()
+        finally:
+            # Restore permissions for cleanup
+            f.chmod(0o644)
 
     def test_backup_dir_permission_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
@@ -119,6 +127,13 @@ class TestBackupFunctions:
             # Verify error message was logged
             assert "Permission denied" in caplog.text
             assert str(test_dir) in caplog.text
+
+            # Verify the backup operation failed
+            # (directory exists but is empty, or doesn't exist)
+            dest_dir = dest / test_dir.name
+            if dest_dir.exists():
+                # If directory was created, it should be empty (no files copied)
+                assert list(dest_dir.iterdir()) == []
         finally:
             # Restore permissions so pytest can clean up tmp_path
             test_dir.chmod(0o755)

@@ -24,8 +24,17 @@ def backup_dir(src: Path, dest: Path) -> None:
         )
     except PermissionError:
         error_handler.handle_permission_error(src)
+    except FileNotFoundError:
+        # Let FileNotFoundError propagate for proper error handling
+        raise
     except shutil.Error as e:
         error_handler.handle_shutil_error(e, src)
+    except OSError as e:
+        # Catch any remaining OS-level errors (e.g., permission errors not caught above)
+        if e.errno == 13:  # Permission denied
+            error_handler.handle_permission_error(src)
+        else:
+            error_handler.handle_shutil_error(e, src)
 
 
 def backup_file(src: Path, dest: Path) -> None:
@@ -36,8 +45,17 @@ def backup_file(src: Path, dest: Path) -> None:
         logger.info(f"Backed up {str(src)} to {str(dest)}")
     except PermissionError:
         error_handler.handle_permission_error(src)
+    except FileNotFoundError:
+        # Let FileNotFoundError propagate for proper error handling
+        raise
     except shutil.Error as e:
         error_handler.handle_shutil_error(e, src)
+    except OSError as e:
+        # Catch any remaining OS-level errors (e.g., permission errors not caught above)
+        if e.errno == 13:  # Permission denied
+            error_handler.handle_permission_error(src)
+        else:
+            error_handler.handle_shutil_error(e, src)
 
 
 def backup_profile(profile: Profile) -> list:
