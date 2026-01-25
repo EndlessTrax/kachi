@@ -22,8 +22,8 @@ def backup_dir(src: Path, dest: Path) -> None:
         logger.info(
             f"Backed up directory, all subdirectories, and files for {str(src)} to {str(dest)}"  # noqa: E501
         )
-    except PermissionError as e:
-        error_handler.handle_permission_error(e, src)
+    except PermissionError:
+        error_handler.handle_permission_error(src)
     except shutil.Error as e:
         error_handler.handle_shutil_error(e, src)
 
@@ -34,8 +34,8 @@ def backup_file(src: Path, dest: Path) -> None:
         f = Path(src).name
         shutil.copy2(src, (dest / f))
         logger.info(f"Backed up {str(src)} to {str(dest)}")
-    except PermissionError as e:
-        error_handler.handle_permission_error(e, src)
+    except PermissionError:
+        error_handler.handle_permission_error(src)
     except shutil.Error as e:
         error_handler.handle_shutil_error(e, src)
 

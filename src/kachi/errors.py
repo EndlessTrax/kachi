@@ -28,12 +28,11 @@ class BackupErrorHandler:
         """
         self.logger = logger
 
-    def handle_permission_error(self, _error: PermissionError, source: Path) -> None:
+    def handle_permission_error(self, source: Path) -> None:
         """
         Handle permission errors during backup operations.
 
         Args:
-            _error: The PermissionError that occurred (currently unused).
             source: The source path that caused the error.
         """
         self.logger.error(
