@@ -109,15 +109,19 @@ class TestBackupFunctions:
         test_file = test_dir / "test-file.txt"
         test_file.write_text("test content")
 
-        # Make directory unreadable
-        test_dir.chmod(0o000)
+        try:
+            # Make directory unreadable
+            test_dir.chmod(0o000)
 
-        # Permission error should be caught and logged, not raised
-        backup_dir(test_dir, dest)
+            # Permission error should be caught and logged, not raised
+            backup_dir(test_dir, dest)
 
-        # Verify error message was logged
-        assert "Permission denied" in caplog.text
-        assert str(test_dir) in caplog.text
+            # Verify error message was logged
+            assert "Permission denied" in caplog.text
+            assert str(test_dir) in caplog.text
+        finally:
+            # Restore permissions so pytest can clean up tmp_path
+            test_dir.chmod(0o755)
 
     def test_backup_dir_not_exist_and_exits(self, tmp_path: Path):
         """Test that an exception is raised when the directory does not exist"""
