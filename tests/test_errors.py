@@ -14,9 +14,8 @@ class TestBackupErrorHandler:
         mock_logger = Mock()
         error_handler = BackupErrorHandler(mock_logger)
         test_path = Path("/test/path/file.txt")
-        test_error = PermissionError("Permission denied")
 
-        error_handler.handle_permission_error(test_error, test_path)
+        error_handler.handle_permission_error(test_path)
 
         # Verify error message was logged
         mock_logger.error.assert_called_once()
