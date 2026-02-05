@@ -72,7 +72,6 @@ def backup(
     logger.info(
         f"Backup complete: {total_success} sources copied, {total_errors} errors."
     )
-    typer.Exit(code=0)
 
 
 if __name__ == "__main__":
