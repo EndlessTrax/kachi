@@ -69,8 +69,10 @@ def backup(
             total_errors += errors
 
     log_not_found(not_found)
+    source_word = "source" if total_success == 1 else "sources"
+    error_word = "error" if total_errors == 1 else "errors"
     logger.info(
-        f"Backup complete: {total_success} sources copied, {total_errors} errors."
+        f"Backup complete: {total_success} {source_word} copied, {total_errors} {error_word}."
     )
 
 
