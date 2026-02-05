@@ -72,7 +72,8 @@ def backup(
     source_word = "source" if total_success == 1 else "sources"
     error_word = "error" if total_errors == 1 else "errors"
     logger.info(
-        f"Backup complete: {total_success} {source_word} copied, {total_errors} {error_word}."
+        f"Backup complete: {total_success} {source_word} copied, "
+        f"{total_errors} {error_word}."
     )
 
 
