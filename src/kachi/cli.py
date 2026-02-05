@@ -45,6 +45,10 @@ def backup(
     conf = Config(config)
     conf.parse()
 
+    not_found = []
+    total_success = 0
+    total_errors = 0
+
     if profile:
         try:
             p = conf.get_profile(profile)
@@ -52,18 +56,22 @@ def backup(
             logger.error(e)
             raise typer.Exit(code=1)
 
-        not_found = backup_profile(p)
-
-        if len(not_found) > 0:
-            logger.warning(f"{len(nf)} sources not backed up.")
+        nf, success, errors = backup_profile(p)
+        not_found.extend(nf)
+        total_success += success
+        total_errors += errors
 
     else:
-        not_found = []
         for p in conf.settings:
-            nf = backup_profile(p)
+            nf, success, errors = backup_profile(p)
             not_found.extend(nf)
+            total_success += success
+            total_errors += errors
 
     log_not_found(not_found)
+    logger.info(
+        f"Backup complete: {total_success} sources copied, {total_errors} errors."
+    )
     typer.Exit(code=0)
 
 
