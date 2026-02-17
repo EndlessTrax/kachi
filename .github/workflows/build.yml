@@ -71,6 +71,25 @@ jobs:
           pattern: kachi-${{ github.ref_name }}-*
           merge-multiple: true
 
+      - name: Generate checksums
+        run: |
+          cd dist
+          # Verify that artifacts exist
+          if [ ! "$(ls -A)" ]; then
+            echo "Error: No artifacts found in dist directory"
+            exit 1
+          fi
+          
+          # Remove any existing checksums file to avoid circular dependency
+          rm -f checksums.txt
+          
+          # Generate SHA256 checksums for all files
+          sha256sum * > checksums.txt
+          
+          # Display checksums for verification in logs
+          echo "Generated checksums:"
+          cat checksums.txt
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
