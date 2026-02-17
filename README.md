@@ -56,6 +56,24 @@ Kachi is deployed as a single executable file that you can [download from the re
 
 > NOTE: If a compatable executable for your OS and architecture isn't available, please create an issue or upvote a current one so it can moved up in priority and added to future releases.
 
+### Verifying Downloads
+
+Each release includes a `checksums.txt` file containing SHA256 checksums for all release artifacts. To verify the integrity of your download:
+
+**On Linux/macOS:**
+```shell
+sha256sum -c checksums.txt
+```
+
+**On Windows (PowerShell):**
+```powershell
+$hash = (Get-FileHash -Algorithm SHA256 kachi-v*-windows-x64.exe).Hash.ToLower()
+$expected = (Get-Content checksums.txt | Select-String "windows-x64.exe").Line.Split()[0]
+if ($hash -eq $expected) { Write-Host "Checksum verified!" } else { Write-Host "Checksum mismatch!" }
+```
+
+Alternatively, you can manually compare the SHA256 hash of your downloaded file with the corresponding entry in `checksums.txt`.
+
 ## Configuration
 
 By default, Kachi looks for a configuration file at `.config/kachi/config.yaml` relative to the user's home directory on all systems. You can specify a different configuration location using the `--config` flag (see usage example below.)
