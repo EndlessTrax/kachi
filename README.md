@@ -30,6 +30,18 @@ Kachi uses "profiles", which allow you to backup different files and directories
 
 ## Installing
 
+### Quick Install (Linux)
+
+For Linux systems, you can use the installation script to automatically download and install the latest version:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.sh | bash
+```
+
+This will download the latest release for your system and install it to `~/.local/bin/kachi`. Make sure `~/.local/bin` is in your `PATH`.
+
+### Manual Installation
+
 Kachi is deployed as a single executable file that you can [download from the releases page](https://github.com/EndlessTrax/kachi/releases). Once downloaded, move it to a location that makes sense for your system and OS, and add it to your PATH. 
 
 > NOTE: If a compatable executable for your OS and architecture isn't available, please create an issue or upvote a current one so it can moved up in priority and added to future releases.
