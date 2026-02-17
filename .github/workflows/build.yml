@@ -39,7 +39,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: src/kachi
-          onefile: true
+          mode: onefile
           output-dir: build
           output-file: kachi-${{ github.ref_name }}-windows-x64.exe
 
@@ -49,7 +49,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: src/kachi
-          onefile: true
+          mode: onefile
           output-dir: build
           output-file: kachi-${{ github.ref_name }}-linux-x64
 
