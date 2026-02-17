@@ -2,7 +2,8 @@
 set -e
 
 # Kachi Installation Script
-# This script downloads and installs the latest release of Kachi
+# This script downloads and installs the latest release of Kachi for Linux x64 systems
+# For other platforms, please download manually from https://github.com/EndlessTrax/kachi/releases
 
 REPO_OWNER="EndlessTrax"
 REPO_NAME="kachi"
