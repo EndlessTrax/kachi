@@ -83,8 +83,10 @@ get_latest_version() {
     # Try to fetch from GitHub API with proper error handling
     local response
     response=$(curl -s -w "\n%{http_code}" "${api_url}" 2>/dev/null)
-    local http_code=$(echo "$response" | tail -n1)
-    local body=$(echo "$response" | sed '$d')
+    local http_code
+    http_code=$(echo "$response" | tail -n1)
+    local body
+    body=$(echo "$response" | sed '$d')
     
     if [ "$http_code" -eq 200 ]; then
         echo "$body" | grep '"tag_name"' | sed -E 's/.*"tag_name": "([^"]+)".*/\1/'
