@@ -80,6 +80,9 @@ jobs:
             exit 1
           fi
           
+          # Remove any existing checksums file to avoid circular dependency
+          rm -f checksums.txt
+          
           # Generate SHA256 checksums for all files
           sha256sum * > checksums.txt
           
