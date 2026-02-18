@@ -22,10 +22,10 @@ class TestCli:
             # Create test files
             test_file = Path(tmpdir) / "test.txt"
             test_file.write_text("test content")
-            
+
             backup_dir = Path(tmpdir) / "backup"
             backup_dir.mkdir()
-            
+
             # Create config
             config_file = Path(tmpdir) / "config.yaml"
             config_file.write_text(
@@ -35,11 +35,11 @@ class TestCli:
                 f"      - {test_file}\n"
                 f"    backup_destination: {backup_dir}\n"
             )
-            
+
             # Run backup - should succeed with new logging format
             result = runner.invoke(app, ["backup", "--config", str(config_file)])
             assert result.exit_code == 0
-            
+
             # Verify backup was successful by checking file exists
             backed_up_file = backup_dir / "test.txt"
             assert backed_up_file.exists()
