@@ -50,6 +50,26 @@ bash install.sh
 
 This will download the latest release for your system and install it to `~/.local/bin/kachi`. Make sure `~/.local/bin` is in your `PATH`.
 
+### Quick Install (Windows)
+
+For Windows x64 systems, you can use the PowerShell installation script to automatically download and install the latest version:
+
+**Option 1: One-liner (requires trust)**
+```powershell
+irm https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.ps1 | iex
+```
+
+**Option 2: Inspect before running (recommended)**
+```powershell
+irm https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.ps1 -OutFile install.ps1
+# Inspect the script
+Get-Content install.ps1
+# Run it if you're satisfied
+.\install.ps1
+```
+
+This will download the latest release for your system and install it to `$HOME\.local\bin\kachi.exe`. Make sure `$HOME\.local\bin` is in your `PATH`.
+
 ### Manual Installation
 
 Kachi is deployed as a single executable file that you can [download from the releases page](https://github.com/EndlessTrax/kachi/releases). Once downloaded, move it to a location that makes sense for your system and OS, and add it to your PATH. 
