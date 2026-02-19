@@ -2,34 +2,31 @@
 
 import logging
 
+from rich.logging import RichHandler
+from rich.text import Text
+
 __version__ = "0.1.14"
 
 
-class ColoredFormatter(logging.Formatter):
-    """Custom formatter with colored output matching installation script format."""
+class KachiLogHandler(RichHandler):
+    """Custom Rich log handler with bracketed level format matching install scripts."""
 
-    # ANSI color codes matching install.sh
-    GREEN = "\033[0;32m"
-    RED = "\033[0;31m"
-    YELLOW = "\033[1;33m"
-    NC = "\033[0m"  # No Color
-
-    COLORS = {
-        logging.INFO: GREEN,
-        logging.WARNING: YELLOW,
-        logging.ERROR: RED,
-        logging.CRITICAL: RED,
-    }
-
-    def format(self, record):
-        """Format log record with colors."""
-        color = self.COLORS.get(record.levelno, self.NC)
-        record.levelname = f"{color}[{record.levelname}]{self.NC}"
-        return super().format(record)
+    def get_level_text(self, record):
+        """Format level as [LEVEL] with Rich styling."""
+        level = record.levelname
+        level_text = Text(f"[{level}]")
+        level_text.stylize(f"logging.level.{level.lower()}")
+        return level_text
 
 
-# Configure logging with colored formatter
-handler = logging.StreamHandler()
-handler.setFormatter(ColoredFormatter("%(levelname)s %(message)s"))
-logging.basicConfig(level=logging.INFO, handlers=[handler], force=True)
+# Configure logging with Rich handler
+handler = KachiLogHandler(
+    show_time=False,
+    show_path=False,
+    markup=True,
+    rich_tracebacks=True,
+)
+logging.basicConfig(
+    level=logging.INFO, handlers=[handler], format="%(message)s", force=True
+)
 logger = logging.getLogger(__name__)
