@@ -1,3 +1,5 @@
+"""Tests for the backup module."""
+
 from pathlib import Path
 from unittest.mock import patch
 
@@ -9,8 +11,10 @@ from src.kachi.config import Profile
 
 
 class TestBackupFunctions:
+    """Tests for backup_file, backup_dir, backup_profile, and log_not_found."""
+
     def test_backup_file(self, tmp_path: Path):
-        """Test that the file is successfully copied to the destination folder"""
+        """Test that the file is successfully copied to the destination folder."""
         d = tmp_path / "test-dir"
         d.mkdir()
         f = d / "test-file.txt"
@@ -22,7 +26,7 @@ class TestBackupFunctions:
         assert (tmp_path / f.name).read_text() == content
 
     def test_backup_dir(self, tmp_path: Path):
-        """Test that the directory is successfully copied to the destination folder"""
+        """Test that the directory is successfully copied to the destination folder."""
         d = tmp_path / "test-dir"
         d.mkdir()
         f = d / "test-file.txt"
@@ -35,7 +39,7 @@ class TestBackupFunctions:
         assert (tmp_path / d.name / f.name).read_text() == content
 
     def test_backup_profile(self, tmp_path: Path):
-        """Test that the profile is successfully backed up"""
+        """Test that the profile is successfully backed up."""
         tmpdir = tmp_path / "test-dir"
         backupdir = tmp_path / "backup-dir"
         tmpdir.mkdir()
@@ -59,7 +63,7 @@ class TestBackupFunctions:
         assert (backupdir / "test-dir" / tmp2.name).exists()
 
     def test_backup_profile_has_invaild_backup_destination(self, tmp_path: Path):
-        """Test that an invalid backup destination raises an error"""
+        """Test that an invalid backup destination raises an error."""
         profile = Profile(
             name="test_profile",
             sources=[tmp_path / "test-file.txt"],
@@ -70,7 +74,7 @@ class TestBackupFunctions:
             backup_profile(profile)
 
     def test_invalid_source_in_profile(self, tmp_path: Path):
-        """Test that an invalid profile name raises an error"""
+        """Test that an invalid profile name raises an error."""
         data = {
             "name": "default",
             "sources": [tmp_path / "test-file.txt"],
@@ -86,7 +90,7 @@ class TestBackupFunctions:
     def test_backup_file_permission_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ):
-        """Test that permission errors are logged correctly when backing up a file"""
+        """Test that permission errors are logged correctly when backing up a file."""
         dest = tmp_path / "backup-dir"
         dest.mkdir()
         f = tmp_path / "test-file.txt"
@@ -107,7 +111,7 @@ class TestBackupFunctions:
     def test_backup_dir_permission_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ):
-        """Test permission errors are logged correctly when backing up a directory"""
+        """Test permission errors are logged correctly when backing up a directory."""
         dest = tmp_path / "backup-dir"
         dest.mkdir()
         test_dir = tmp_path / "test-dir"
@@ -126,7 +130,7 @@ class TestBackupFunctions:
             assert str(test_dir) in caplog.text
 
     def test_backup_dir_not_exist_and_exits(self, tmp_path: Path):
-        """Test that an exception is raised when the directory does not exist"""
+        """Test that an exception is raised when the directory does not exist."""
         d = tmp_path / "test-dir"
 
         with pytest.raises(Exception):
@@ -135,7 +139,7 @@ class TestBackupFunctions:
         assert typer.Exit(code=1)
 
     def test_log_not_found_func(self, caplog: pytest.LogCaptureFixture):
-        """Test that the sources not found are logged"""
+        """Test that the sources not found are logged."""
         not_found = [Path("test-file-1.txt"), Path("test-file-2.txt")]
         log_not_found(not_found)
 
@@ -144,7 +148,7 @@ class TestBackupFunctions:
         assert "Source not found: test-file-2.txt" in caplog.text
 
     def test_backup_file_returns_true_on_success(self, tmp_path: Path):
-        """Test that backup_file returns True on success"""
+        """Test that backup_file returns True on success."""
         d = tmp_path / "test-dir"
         d.mkdir()
         f = d / "test-file.txt"
@@ -154,7 +158,7 @@ class TestBackupFunctions:
         assert result is True
 
     def test_backup_file_returns_false_on_permission_error(self, tmp_path: Path):
-        """Test that backup_file returns False on permission error"""
+        """Test that backup_file returns False on permission error."""
         backup_dest = tmp_path / "backup-dir"
         backup_dest.mkdir()
         f = tmp_path / "test-file.txt"
@@ -165,7 +169,7 @@ class TestBackupFunctions:
             assert result is False
 
     def test_backup_dir_returns_true_on_success(self, tmp_path: Path):
-        """Test that backup_dir returns True on success"""
+        """Test that backup_dir returns True on success."""
         src_dir = tmp_path / "source-dir"
         dest_dir = tmp_path / "dest-dir"
         src_dir.mkdir()
@@ -177,7 +181,7 @@ class TestBackupFunctions:
         assert result is True
 
     def test_backup_dir_returns_false_on_permission_error(self, tmp_path: Path):
-        """Test that backup_dir returns False on permission error"""
+        """Test that backup_dir returns False on permission error."""
         dest = tmp_path / "backup-dir"
         dest.mkdir()
         test_dir = tmp_path / "test-dir"
@@ -192,7 +196,7 @@ class TestBackupFunctions:
             assert result is False
 
     def test_backup_profile_returns_counts(self, tmp_path: Path):
-        """Test that backup_profile returns success and error counts"""
+        """Test that backup_profile returns success and error counts."""
         tmpdir = tmp_path / "test-dir"
         backupdir = tmp_path / "backup-dir"
         tmpdir.mkdir()
@@ -216,7 +220,7 @@ class TestBackupFunctions:
         assert error_count == 0
 
     def test_backup_profile_counts_mixed_sources(self, tmp_path: Path):
-        """Test that backup_profile counts both successes and errors correctly"""
+        """Test that backup_profile counts both successes and errors correctly."""
         backupdir = tmp_path / "backup-dir"
         backupdir.mkdir()
 

@@ -1,3 +1,5 @@
+"""Tests for the CLI module."""
+
 import tempfile
 from pathlib import Path
 
@@ -10,7 +12,10 @@ runner = CliRunner()
 
 
 class TestCli:
+    """Tests for Kachi CLI commands and flags."""
+
     def test_get_version(self):
+        """Test that --version prints the current version and exits cleanly."""
         result = runner.invoke(app, ["--version"])
         assert result.exit_code == 0
         assert "kachi" in result.stdout
