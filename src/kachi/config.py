@@ -122,7 +122,7 @@ class Config:
         Raises:
             FileNotFoundError: If the given path does not exist.
         """
-        if filepath is None:
+        if not filepath:
             logger.info(f"Using default config path: {DEFAULT_CONFIG_PATH}")
             return DEFAULT_CONFIG_PATH
 
