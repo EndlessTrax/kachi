@@ -21,6 +21,11 @@ class TestConfig:
         config = Config()
         assert config.filepath == DEFAULT_CONFIG_PATH
 
+    def test_empty_string_uses_default_config_path(self):
+        """Test that Config uses the default path when an empty string is given."""
+        config = Config("")
+        assert config.filepath == DEFAULT_CONFIG_PATH
+
     def test_sets_custom_config_path(self, test_config_path: Path):
         """Test that Config uses a custom path when provided."""
         config = Config(test_config_path)
