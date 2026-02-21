@@ -1,5 +1,6 @@
 """CLI layer for Kachi, built with Typer."""
 
+import logging
 from pathlib import Path
 
 import typer
@@ -30,9 +31,23 @@ def cli(
         bool,
         typer.Option("--version", callback=get_version, help="Show current version"),
     ] = False,
+    quiet: Annotated[
+        bool,
+        typer.Option("--quiet", "-q", help="Suppress informational output"),
+    ] = False,
+    verbose: Annotated[
+        bool,
+        typer.Option("--verbose", "-v", help="Enable verbose (debug) output"),
+    ] = False,
 ):
     """Kachi is a simple tool for backing up valuable files."""
-    pass  # pragma: no cover
+    if quiet and verbose:
+        logger.error("Cannot use --quiet and --verbose together.")
+        raise typer.Exit(code=1)
+    if quiet:
+        logging.getLogger().setLevel(logging.WARNING)
+    elif verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
 
 
 @app.command()

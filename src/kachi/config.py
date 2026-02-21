@@ -65,8 +65,7 @@ class Settings:
         if "default" in parsed_contents["profiles"]:
             if "sources" in parsed_contents["profiles"]["default"]:
                 default_sources.extend(
-                    Path(s)
-                    for s in parsed_contents["profiles"]["default"]["sources"]
+                    Path(s) for s in parsed_contents["profiles"]["default"]["sources"]
                 )
             if "backup_destination" in parsed_contents["profiles"]["default"]:
                 default_backup_dest = Path(

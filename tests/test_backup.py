@@ -119,9 +119,7 @@ class TestBackupFunctions:
         test_file = test_dir / "test-file.txt"
         test_file.write_text("test content")
 
-        with patch(
-            "shutil.copytree", side_effect=PermissionError("Permission denied")
-        ):
+        with patch("shutil.copytree", side_effect=PermissionError("Permission denied")):
             # Permission error should be caught and logged, not raised
             backup_dir(test_dir, dest)
 
@@ -189,9 +187,7 @@ class TestBackupFunctions:
         test_file = test_dir / "test-file.txt"
         test_file.write_text("test content")
 
-        with patch(
-            "shutil.copytree", side_effect=PermissionError("Permission denied")
-        ):
+        with patch("shutil.copytree", side_effect=PermissionError("Permission denied")):
             result = backup_dir(test_dir, dest)
             assert result is False
 
