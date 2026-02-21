@@ -97,7 +97,7 @@ def backup_profile(profile: Profile) -> tuple[list, int, int]:
         - Count of errors encountered.
     """
     dest = profile.backup_destination
-    if not dest.exists() or not dest.is_dir():
+    if dest is None or not dest.exists() or not dest.is_dir():
         error_handler.handle_invalid_destination(dest)
         raise typer.Exit(code=1)
 
