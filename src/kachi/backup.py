@@ -1,3 +1,5 @@
+"""File-system backup operations for Kachi profiles."""
+
 import shutil
 from pathlib import Path
 
@@ -13,6 +15,10 @@ error_handler = BackupErrorHandler(logger)
 
 def backup_dir(src: Path, dest: Path) -> bool:
     """Copy a directory from src to dest.
+
+    Args:
+        src: Source directory path to copy.
+        dest: Destination directory where the copy is placed.
 
     Returns:
         True if the backup was successful, False if an error occurred.
@@ -48,6 +54,10 @@ def backup_dir(src: Path, dest: Path) -> bool:
 def backup_file(src: Path, dest: Path) -> bool:
     """Copy a file from src to dest.
 
+    Args:
+        src: Source file path to copy.
+        dest: Destination directory where the copy is placed.
+
     Returns:
         True if the backup was successful, False if an error occurred.
     """
@@ -75,16 +85,19 @@ def backup_file(src: Path, dest: Path) -> bool:
 
 
 def backup_profile(profile: Profile) -> tuple[list, int, int]:
-    """Backup a profile.
+    """Backup all sources defined in a profile.
+
+    Args:
+        profile: The Profile object containing sources and destination.
 
     Returns:
         A tuple containing:
-        - List of sources not found
-        - Count of successfully backed up sources
-        - Count of errors encountered
+        - List of sources not found.
+        - Count of successfully backed up sources.
+        - Count of errors encountered.
     """
-    dest = Path(profile.backup_destination)
-    if not dest.exists() or not dest.is_dir():
+    dest = profile.backup_destination
+    if dest is None or not dest.exists() or not dest.is_dir():
         error_handler.handle_invalid_destination(dest)
         raise typer.Exit(code=1)
 
@@ -94,14 +107,13 @@ def backup_profile(profile: Profile) -> tuple[list, int, int]:
     success_count = 0
     error_count = 0
 
-    for source in profile.sources:
-        src = Path(source)
-        if Path(src).is_file():
+    for src in profile.sources:
+        if src.is_file():
             if backup_file(src, dest):
                 success_count += 1
             else:
                 error_count += 1
-        elif Path(src).is_dir():
+        elif src.is_dir():
             if backup_dir(src, dest):
                 success_count += 1
             else:
@@ -115,7 +127,11 @@ def backup_profile(profile: Profile) -> tuple[list, int, int]:
 
 
 def log_not_found(not_found: list) -> None:
-    """Log sources not found at the end of the backup."""
+    """Log a summary of sources that were not found during a backup run.
+
+    Args:
+        not_found: List of source paths that could not be located.
+    """
     if len(not_found) > 0:
         logger.warning(f"{len(not_found)} sources not backed up.")
 

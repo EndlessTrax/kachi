@@ -12,7 +12,14 @@ class KachiLogHandler(RichHandler):
     """Custom Rich log handler with bracketed level format matching install scripts."""
 
     def get_level_text(self, record):
-        """Format level as [LEVEL] with Rich styling."""
+        """Format the log level as [LEVEL] with Rich styling.
+
+        Args:
+            record: The log record to format.
+
+        Returns:
+            A Rich Text object with the formatted level string.
+        """
         level = record.levelname
         level_text = Text(f"[{level}]")
         level_text.stylize(f"logging.level.{level.lower()}")

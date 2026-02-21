@@ -3,16 +3,16 @@
 
 # Kachi
 
-Kachi is a simple tool for backing up valuable files, such as dotfiles, config files, and any directory you wish to backup. 
+Kachi is a simple tool for backing up valuable files, such as dotfiles, config files, and any directory you wish to backup.
 
-By creating a short yaml file, you can declaratively decide what to back up, and where. 
+By creating a short yaml file, you can declaratively decide what to back up, and where.
 
 Kachi uses "profiles", which allow you to backup different files and directories to different locations, and potentially on different schedules (if you automate it further).
 
-```txt
-➜ .\kachi.exe --help
+```text
+➜ kachi --help
 
- Usage: kachi.exe [OPTIONS] COMMAND [ARGS]...
+ Usage: kachi [OPTIONS] COMMAND [ARGS]...
 
  Kachi is a simple tool for backing up valuable files.
 
@@ -35,11 +35,13 @@ Kachi uses "profiles", which allow you to backup different files and directories
 For Linux x64 systems, you can use the installation script to automatically download and install the latest version:
 
 **Option 1: One-liner (requires trust)**
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.sh | bash
 ```
 
 **Option 2: Inspect before running (recommended)**
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.sh -o install.sh
 # Inspect the script
@@ -55,11 +57,13 @@ This will download the latest release for your system and install it to `~/.loca
 For Windows x64 systems, you can use the PowerShell installation script to automatically download and install the latest version:
 
 **Option 1: One-liner (requires trust)**
+
 ```powershell
 irm https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.ps1 | iex
 ```
 
 **Option 2: Inspect before running (recommended)**
+
 ```powershell
 irm https://raw.githubusercontent.com/EndlessTrax/kachi/main/install.ps1 -OutFile install.ps1
 # Inspect the script
@@ -74,18 +78,20 @@ This will download the latest release for your system and install it to `$HOME\.
 
 Kachi is deployed as a single executable file that you can [download from the releases page](https://github.com/EndlessTrax/kachi/releases). Once downloaded, move it to a location that makes sense for your system and OS, and add it to your PATH. 
 
-> NOTE: If a compatable executable for your OS and architecture isn't available, please create an issue or upvote a current one so it can moved up in priority and added to future releases.
+> NOTE: If a compatible executable for your OS and architecture isn't available, please create an issue or upvote a current one so it can be moved up in priority and added to future releases.
 
 ### Verifying Downloads
 
 Each release includes a `checksums.txt` file containing SHA256 checksums for all release artifacts. To verify the integrity of your download:
 
 **On Linux/macOS:**
-```shell
+
+```bash
 sha256sum -c checksums.txt
 ```
 
 **On Windows (PowerShell):**
+
 ```powershell
 $hash = (Get-FileHash -Algorithm SHA256 kachi-v*-windows-x64.exe).Hash.ToLower()
 $expected = (Get-Content checksums.txt | Select-String "windows-x64.exe").Line.Split()[0]
@@ -114,20 +120,20 @@ profiles:
       - ".bashrc"
 ```
 
-> NOTE: A fuller [example of the config.yaml](examples\example.yaml) file can be found in the example folder.
+> NOTE: A fuller [example of the config.yaml](examples/example.yaml) file can be found in the examples folder.
 
 In the above example, if you backup `profile_1`, both the `.gitconfig` and `.bashrc` files will be backed up to the default `backup_destination`. If a `backup_destination` was declared in `profile_1`, then that would take precedence.
 
-> NOTE: Additional config formats will be added in future (such as `json` or `ini`), but please see issues and upvote any you wish to be added next to help prioritize formats.
+> NOTE: Additional config formats (such as JSON — see [#14](https://github.com/EndlessTrax/kachi/issues/14)) are planned. Please upvote any issues you wish to see prioritized.
 
 ## Usage
 
 To back up the declared sources from your configuration, use the `backup` command with optional flags:
 
-```txt
-➜ .\kachi.exe backup --help
+```text
+➜ kachi backup --help
 
- Usage: kachi.exe backup [OPTIONS]
+ Usage: kachi backup [OPTIONS]
 
  Backup files and directories.
  If no profile is specified, all profiles in the configuration file will be backed up.
@@ -143,14 +149,25 @@ To back up the declared sources from your configuration, use the `backup` comman
 
 Without any flags, all profiles will be backed up using a config file in the expected default location. Alternatively, specify a single profile to backup with `--profile`:
 
-```shell
-kachi backup --profile profile_1 
+```bash
+kachi backup --profile profile_1
 ```
 
 Or specify a configuration to use using `--config`:
 
-```shell
+```bash
 kachi backup --config some/other/path/config.yaml
+```
+
+## Development
+
+Kachi uses [uv](https://docs.astral.sh/uv/) for package and environment management.
+
+```bash
+uv sync --all-extras --dev   # install dependencies
+uv run pytest                # run tests with coverage
+uv run ruff check .          # lint
+uv run ruff format .         # format
 ```
 
 ## Contributing
@@ -159,6 +176,8 @@ If you find a bug, please file an [issue](https://github.com/EndlessTrax/kachi/i
 
 If you have feature requests, please [file an issue](https://github.com/EndlessTrax/kachi/issues) and use the appropriate label.
 
-Please **raise an issue before making a PR**, so that the issue and implementation can be discussed before you write any code. This will save you time, and increase the chances of your PR being merged without significant changes. And please **include tests** for any PRs that include code (unless current tests cover your code contribution).
+Please **raise an issue before making a PR**, so that the issue and implementation can be discussed before you write any code. This will save you time, and increase the chances of your PR being merged without significant changes.
 
-Please **lint and format your code** with [ruff](https://github.com/astral-sh/ruff). This will help keep the codebase consistent and maintainable.
+Please **include tests** for any PRs that include code (unless current tests already cover your contribution).
+
+Please **lint and format your code** with [ruff](https://github.com/astral-sh/ruff) before submitting.

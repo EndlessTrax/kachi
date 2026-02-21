@@ -20,8 +20,7 @@ class BackupErrorHandler:
     """Handler for backup operation errors using composition."""
 
     def __init__(self, logger: ErrorLogger):
-        """
-        Initialize the error handler.
+        """Initialize the error handler.
 
         Args:
             logger: A logger instance that implements the ErrorLogger protocol.
@@ -29,8 +28,7 @@ class BackupErrorHandler:
         self.logger = logger
 
     def handle_permission_error(self, source: Path) -> None:
-        """
-        Handle permission errors during backup operations.
+        """Handle permission errors during backup operations.
 
         Args:
             source: The source path that caused the error.
@@ -42,8 +40,7 @@ class BackupErrorHandler:
         self.logger.warning(f"Skipping {str(source)} due to permission error.")
 
     def handle_shutil_error(self, error: Exception, source: Path) -> None:
-        """
-        Handle shutil errors during backup operations.
+        """Handle shutil errors during backup operations.
 
         Args:
             error: The shutil error that occurred.
@@ -54,8 +51,7 @@ class BackupErrorHandler:
         self.logger.error(f"Error details: {str(error)}")
 
     def handle_file_not_found(self, source: Path) -> None:
-        """
-        Handle file not found errors.
+        """Handle file not found errors.
 
         Args:
             source: The source path that was not found.
@@ -63,8 +59,7 @@ class BackupErrorHandler:
         self.logger.error(f"{str(source)} not found")
 
     def handle_invalid_destination(self, destination: Path) -> None:
-        """
-        Handle invalid destination errors.
+        """Handle invalid destination errors.
 
         Args:
             destination: The invalid destination path.

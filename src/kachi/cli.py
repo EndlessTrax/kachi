@@ -1,3 +1,5 @@
+"""CLI layer for Kachi, built with Typer."""
+
 from pathlib import Path
 
 import typer
@@ -12,6 +14,11 @@ app = typer.Typer(no_args_is_help=True)
 
 
 def get_version(value: bool) -> None:
+    """Print the current Kachi version and exit.
+
+    Args:
+        value: Whether the ``--version`` flag was passed.
+    """
     if value:
         print(f"kachi v{kachi_version}")
         raise typer.Exit()
@@ -38,6 +45,12 @@ def backup(
     If no profile is specified, all profiles in the configuration file
     will be backed up. If no configuration file is specified, the
     default configuration file path will be used.
+
+    Args:
+        config: Path to a YAML configuration file. Uses the default
+            path when empty.
+        profile: Name of a single profile to back up. When empty, all
+            profiles are backed up.
     """
 
     logger.info("Starting backup...")
