@@ -120,17 +120,20 @@ class Config:
             The resolved configuration file Path.
 
         Raises:
-            FileNotFoundError: If the given path does not exist.
+            FileNotFoundError: If the given path does not exist or is not a file.
         """
         if not filepath:
             logger.info(f"Using default config path: {DEFAULT_CONFIG_PATH}")
             return DEFAULT_CONFIG_PATH
 
-        if not pathlib.Path(filepath).exists():
-            raise FileNotFoundError(logger.error(f"Config file not found: {filepath}"))
+        path = pathlib.Path(filepath)
+        if not path.is_file():
+            msg = f"Config file not found: {filepath}"
+            logger.error(msg)
+            raise FileNotFoundError(msg)
 
         logger.info(f"Using config path: {filepath}")
-        return pathlib.Path(filepath)
+        return path
 
     def parse(self) -> None:
         """Parse the configuration file and populate ``self.settings``."""

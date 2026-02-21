@@ -36,6 +36,11 @@ class TestConfig:
         with pytest.raises(FileNotFoundError):
             Config(Path("invalid/path.yaml"))
 
+    def test_directory_config_path(self, tmp_path: Path):
+        """Test that a directory path raises FileNotFoundError."""
+        with pytest.raises(FileNotFoundError):
+            Config(tmp_path)
+
     def test_profile_dataclass(self):
         """Test that the Profile dataclass stores fields correctly."""
         profile = Profile(
