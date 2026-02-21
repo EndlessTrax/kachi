@@ -62,7 +62,7 @@ class TestBackupFunctions:
         assert (backupdir / tmp1.name).exists()
         assert (backupdir / "test-dir" / tmp2.name).exists()
 
-    def test_backup_profile_has_invaild_backup_destination(self, tmp_path: Path):
+    def test_backup_profile_has_invalid_backup_destination(self, tmp_path: Path):
         """Test that an invalid backup destination raises an error."""
         profile = Profile(
             name="test_profile",
