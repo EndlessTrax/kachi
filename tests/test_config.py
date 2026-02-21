@@ -42,7 +42,7 @@ class TestConfig:
         assert profile.sources == [Path(".bashrc"), Path(".gitconfig")]
         assert profile.backup_destination == Path("/home/user/backup")
 
-    def test_settings_class(self, test_config_path: str):
+    def test_settings_class(self, test_config_path: Path):
         """Test that Settings parses profiles with default inheritance."""
         settings = Settings(test_config_path)
         assert len(settings.settings) == 3
