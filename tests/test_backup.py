@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 import typer
@@ -50,7 +51,7 @@ class TestBackupFunctions:
             Profile(
                 name="test_profile",
                 sources=[tmp1, tmpdir],
-                backup_destination=str(backupdir),
+                backup_destination=backupdir,
             )
         )
 
@@ -86,16 +87,14 @@ class TestBackupFunctions:
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ):
         """Test that permission errors are logged correctly when backing up a file"""
-        backup_dir = tmp_path / "backup-dir"
-        backup_dir.mkdir()
+        dest = tmp_path / "backup-dir"
+        dest.mkdir()
         f = tmp_path / "test-file.txt"
         f.write_text("test content")
 
-        try:
-            f.chmod(0o000)
-
+        with patch("shutil.copy2", side_effect=PermissionError("Permission denied")):
             # Permission error should be caught and logged, not raised
-            backup_file(f, backup_dir)
+            backup_file(f, dest)
 
             # Verify error message was logged
             assert "Permission denied" in caplog.text
@@ -103,10 +102,7 @@ class TestBackupFunctions:
             assert "Skipping" in caplog.text
 
             # Verify the backup operation failed (file not copied)
-            assert not (backup_dir / f.name).exists()
-        finally:
-            # Restore permissions for cleanup
-            f.chmod(0o644)
+            assert not (dest / f.name).exists()
 
     def test_backup_dir_permission_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
@@ -119,26 +115,15 @@ class TestBackupFunctions:
         test_file = test_dir / "test-file.txt"
         test_file.write_text("test content")
 
-        try:
-            # Make directory unreadable
-            test_dir.chmod(0o000)
-
+        with patch(
+            "shutil.copytree", side_effect=PermissionError("Permission denied")
+        ):
             # Permission error should be caught and logged, not raised
             backup_dir(test_dir, dest)
 
             # Verify error message was logged
             assert "Permission denied" in caplog.text
             assert str(test_dir) in caplog.text
-
-            # Verify the backup operation failed
-            # (directory exists but is empty, or doesn't exist)
-            dest_dir = dest / test_dir.name
-            if dest_dir.exists():
-                # If directory was created, it should be empty (no files copied)
-                assert list(dest_dir.iterdir()) == []
-        finally:
-            # Restore permissions so pytest can clean up tmp_path
-            test_dir.chmod(0o755)
 
     def test_backup_dir_not_exist_and_exits(self, tmp_path: Path):
         """Test that an exception is raised when the directory does not exist"""
@@ -175,12 +160,9 @@ class TestBackupFunctions:
         f = tmp_path / "test-file.txt"
         f.write_text("test content")
 
-        try:
-            f.chmod(0o000)
+        with patch("shutil.copy2", side_effect=PermissionError("Permission denied")):
             result = backup_file(f, backup_dest)
             assert result is False
-        finally:
-            f.chmod(0o644)
 
     def test_backup_dir_returns_true_on_success(self, tmp_path: Path):
         """Test that backup_dir returns True on success"""
@@ -203,12 +185,11 @@ class TestBackupFunctions:
         test_file = test_dir / "test-file.txt"
         test_file.write_text("test content")
 
-        try:
-            test_dir.chmod(0o000)
+        with patch(
+            "shutil.copytree", side_effect=PermissionError("Permission denied")
+        ):
             result = backup_dir(test_dir, dest)
             assert result is False
-        finally:
-            test_dir.chmod(0o755)
 
     def test_backup_profile_returns_counts(self, tmp_path: Path):
         """Test that backup_profile returns success and error counts"""
@@ -226,7 +207,7 @@ class TestBackupFunctions:
             Profile(
                 name="test_profile",
                 sources=[tmp1, tmpdir],
-                backup_destination=str(backupdir),
+                backup_destination=backupdir,
             )
         )
 
@@ -246,7 +227,7 @@ class TestBackupFunctions:
             Profile(
                 name="test_profile",
                 sources=[existing_file, tmp_path / "nonexistent.txt"],
-                backup_destination=str(backupdir),
+                backup_destination=backupdir,
             )
         )
 

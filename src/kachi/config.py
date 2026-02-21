@@ -1,5 +1,6 @@
 import pathlib
 from dataclasses import dataclass
+from pathlib import Path
 
 import yaml
 
@@ -11,8 +12,8 @@ DEFAULT_CONFIG_PATH = pathlib.Path.home() / ".config" / "kachi" / "config.yaml"
 @dataclass
 class Profile:
     name: str
-    sources: list[str]
-    backup_destination: str
+    sources: list[Path]
+    backup_destination: Path | None
 
 
 class Settings:
@@ -35,12 +36,13 @@ class Settings:
         if "default" in parsed_contents["profiles"]:
             if "sources" in parsed_contents["profiles"]["default"]:
                 default_sources.extend(
-                    parsed_contents["profiles"]["default"]["sources"]
+                    Path(s)
+                    for s in parsed_contents["profiles"]["default"]["sources"]
                 )
             if "backup_destination" in parsed_contents["profiles"]["default"]:
-                default_backup_dest = parsed_contents["profiles"]["default"][
-                    "backup_destination"
-                ]
+                default_backup_dest = Path(
+                    parsed_contents["profiles"]["default"]["backup_destination"]
+                )
 
             settings.append(
                 Profile(
@@ -55,10 +57,10 @@ class Settings:
                 settings.append(
                     Profile(
                         name=k,
-                        sources=[*v["sources"], *default_sources]
+                        sources=[*[Path(s) for s in v["sources"]], *default_sources]
                         if "sources" in v
-                        else default_sources,
-                        backup_destination=v["backup_destination"]
+                        else list(default_sources),
+                        backup_destination=Path(v["backup_destination"])
                         if "backup_destination" in v
                         else default_backup_dest,
                     )
@@ -68,11 +70,11 @@ class Settings:
 
 
 class Config:
-    def __init__(self, filepath=None):
+    def __init__(self, filepath: Path | None = None):
         self.filepath = self._set_filepath(filepath)
 
-    def _set_filepath(self, filepath: str) -> str:
-        if filepath == "" or filepath is None:
+    def _set_filepath(self, filepath: Path | None) -> Path:
+        if filepath is None:
             logger.info(f"Using default config path: {DEFAULT_CONFIG_PATH}")
             return DEFAULT_CONFIG_PATH
 
@@ -80,12 +82,12 @@ class Config:
             raise FileNotFoundError(logger.error(f"Config file not found: {filepath}"))
 
         logger.info(f"Using config path: {filepath}")
-        return filepath
+        return pathlib.Path(filepath)
 
     def parse(self) -> None:
         self.settings = Settings(self.filepath).settings
 
-    def get_profile(self, name: str) -> Profile | ValueError:
+    def get_profile(self, name: str) -> Profile:
         for profile in self.settings:
             if profile.name == name:
                 return profile

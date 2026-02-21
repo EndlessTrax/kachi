@@ -83,7 +83,7 @@ def backup_profile(profile: Profile) -> tuple[list, int, int]:
         - Count of successfully backed up sources
         - Count of errors encountered
     """
-    dest = Path(profile.backup_destination)
+    dest = profile.backup_destination
     if not dest.exists() or not dest.is_dir():
         error_handler.handle_invalid_destination(dest)
         raise typer.Exit(code=1)
@@ -94,14 +94,13 @@ def backup_profile(profile: Profile) -> tuple[list, int, int]:
     success_count = 0
     error_count = 0
 
-    for source in profile.sources:
-        src = Path(source)
-        if Path(src).is_file():
+    for src in profile.sources:
+        if src.is_file():
             if backup_file(src, dest):
                 success_count += 1
             else:
                 error_count += 1
-        elif Path(src).is_dir():
+        elif src.is_dir():
             if backup_dir(src, dest):
                 success_count += 1
             else:
