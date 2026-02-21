@@ -70,7 +70,7 @@ def backup(
 
     logger.info("Starting backup...")
 
-    conf = Config(config)
+    conf = Config(Path(config) if config else None)
     conf.parse()
 
     not_found = []
