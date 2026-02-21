@@ -74,7 +74,7 @@ class TestBackupFunctions:
             backup_profile(profile)
 
     def test_invalid_source_in_profile(self, tmp_path: Path):
-        """Test that an invalid profile name raises an error."""
+        """Test that an invalid/missing source path in a profile is reported as an error."""
         data = {
             "name": "default",
             "sources": [tmp_path / "test-file.txt"],
