@@ -54,7 +54,7 @@ jobs:
           output-file: kachi-${{ github.ref_name }}-linux-x64
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: kachi-${{ github.ref_name }}-${{ matrix.os }}
           path: |
