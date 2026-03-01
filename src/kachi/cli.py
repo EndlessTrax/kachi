@@ -2,9 +2,9 @@
 
 import logging
 from pathlib import Path
+from typing import Annotated
 
 import typer
-from typing_extensions import Annotated
 
 from kachi import __version__ as kachi_version
 from kachi import logger
