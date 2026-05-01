@@ -50,6 +50,6 @@ docstring-code-line-length = 72
 dev = [
     "nuitka>=2.4.11",
     "pytest>=9.0.3",
-    "pytest-cov>=6.0.0",
+    "pytest-cov>=7.1.0",
     "ruff>=0.15.12",
 ]
