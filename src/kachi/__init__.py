@@ -5,7 +5,7 @@ import logging
 from rich.logging import RichHandler
 from rich.text import Text
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 
 class KachiLogHandler(RichHandler):
