@@ -43,6 +43,19 @@ jobs:
           output-dir: build
           output-file: kachi-${{ github.ref_name }}-windows-x64.exe
 
+      - name: Install ccache (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          set -euo pipefail
+          for i in 1 2 3; do
+            if sudo apt-get update && sudo apt-get install -y ccache; then
+              exit 0
+            fi
+            [ "$i" -lt 3 ] && sleep 15
+          done
+          echo "Failed to install ccache after 3 attempts" >&2
+          exit 1
+
       - name: Build Executable (Linux)
         uses: Nuitka/Nuitka-Action@main
         if: matrix.os == 'ubuntu-latest'
