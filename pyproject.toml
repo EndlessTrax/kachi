@@ -48,7 +48,7 @@ docstring-code-line-length = 72
 
 [dependency-groups]
 dev = [
-    "nuitka>=4.0.8",
+    "nuitka>=4.1.2",
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.16",
